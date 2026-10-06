@@ -1,0 +1,57 @@
+---
+const navLinks = [
+  { name: "Inicio", url: "/" },
+  { name: "Sobre mí", url: "#about-me" },
+  { name: "Marcas", url: "#brands" },
+  { name: "Portafolio", url: "#portfolio" },
+  { name: "Servicios", url: "#services" },
+];
+
+const current = Astro.url.pathname.replace(/\/$/, "") || "/";
+---
+
+<header
+  id="header"
+  class="fixed top-0 z-50 w-full backdrop-blur-md transition-all duration-300 [&.scrolled]:shadow-[0_4px_24px_rgb(74_52_39/0.15)]"
+>
+  <div
+    class="mx-auto flex w-[85%] max-w-360 items-center justify-between py-4 transition-all duration-300 [#header.scrolled_&]:py-2"
+  >
+    <a href="/" aria-label="Ir al inicio">
+      <img
+        src="/logo.png"
+        alt="Natalia Morales, maquillaje"
+        class="logo h-14 w-auto transition-all duration-300 [#header.scrolled_&]:h-10 brightness-0 invert"
+      />
+    </a>
+
+    <nav aria-label="Principal">
+      <ul
+        class="flex flex-wrap justify-end gap-x-4 gap-y-1 text-sm sm:gap-x-7 sm:text-base"
+      >
+        {
+          navLinks.map((link) => {
+            const active = current === link.url;
+            return (
+              <li>
+                <a
+                  href={link.url}
+                  aria-current={active ? "page" : undefined}
+                  class:list={[
+                    "font-secondary relative py-1 uppercase tracking-wide transition-colors hover:text-[#d47fa9]",
+                    "after:absolute after:inset-x-0 after:-bottom-0.5 after:h-px after:origin-left after:bg-rose-dark after:transition-transform after:duration-300",
+                    active
+                      ? "text-[#d47fa9] after:scale-x-100"
+                      : "text-white after:scale-x-0 hover:after:scale-x-100",
+                  ]}
+                >
+                  {link.name}
+                </a>
+              </li>
+            );
+          })
+        }
+      </ul>
+    </nav>
+  </div>
+</header>

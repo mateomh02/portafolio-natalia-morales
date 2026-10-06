@@ -1,0 +1,38 @@
+@import "tailwindcss";
+
+@theme {
+    /* Colores */
+    --color-primary: #C4967C;
+    /* canela suave: botones, acentos */
+    --color-primary-dark: #98705A;
+    /* texto de acento, links hover */
+    --color-secondary: #E6CBB9;
+    /* nude: botones secundarios, detalles */
+    --color-background: #F6EFE7;
+    /* hueso: fondo de página */
+    --color-surface: #FBF8F3;
+    /* tarjetas */
+    --color-section: #EEE1D4;
+    /* fondo de secciones (servicios) */
+    --color-footer: #EBD8C9;
+    /* contacto y footer */
+    --color-text: #5E4A3F;
+    /* texto principal */
+    --color-text-dark: #4A3427;
+    /* texto sobre nude */
+
+    --color-rose: #EAD1DD;
+    /* palo de rosa suave: header */
+    --color-rose-dark: #7A5445
+        /* Fuentes */
+        --font-primary: "Cormorant Garamond", Georgia, serif;
+    --font-secondary: "Figtree", system-ui, sans-serif;
+}
+
+body {
+    @apply bg-background text-text font-secondary;
+}
+
+html {
+    scroll-behavior: smooth;
+}

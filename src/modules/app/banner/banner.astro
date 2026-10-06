@@ -1,0 +1,85 @@
+---
+// src/components/Hero.astro
+---
+
+<section
+  class="relative isolate h-[calc(100svh-5.5rem)] min-h-[520px] w-full overflow-hidden"
+>
+  <img
+    src="/banner.png"
+    alt="Natalia Morales maquillando a una novia en su estudio"
+    class="hero-img absolute inset-0 -z-20 h-full w-full object-cover object-[60%_30%] brightness-50"
+    fetchpriority="high"
+    loading="eager"
+    decoding="async"
+  />
+
+  <!-- Degradado para que el texto se lea -->
+  <div
+    class="absolute inset-0 -z-10 bg-gradient-to-t from-[#3a2a21]/80 via-[#3a2a21]/20 to-transparent"
+  >
+  </div>
+
+  <div class="mx-auto flex h-full max-w-7xl items-end px-[6vw] pb-[10vh]">
+    <div class="max-w-xl text-white">
+      <p
+        class="reveal font-rose mb-3 text-sm uppercase tracking-[0.25em] text-white"
+        style="--d:0.1s"
+      >
+        Maquillaje profesional
+      </p>
+      <h1
+        class="reveal font-primary text-5xl leading-[1.05] sm:text-6xl lg:text-7xl"
+        style="--d:0.25s"
+      >
+        Tu piel, tu tono, <em class="text-[#d47fa9]">tu mejor día</em>
+      </h1>
+      <p class="reveal font-rose mt-5 max-w-md text-white/90" style="--d:0.4s">
+        Novias, sesiones y eventos con acabados suaves y piel luminosa.
+      </p>
+      <div class="reveal mt-8 flex flex-wrap gap-3" style="--d:0.55s">
+        <a
+          href="/services"
+          class="rounded-full bg-[#d47fa9] px-8 py-3.5 font-medium text-white transition hover:-translate-y-0.5 hover:bg-[#a36584]"
+        >
+          Reservar cita
+        </a>
+        <a
+          href="/portfolio"
+          class="rounded-full border border-white/70 px-8 py-3.5 text-white transition hover:bg-white/15"
+        >
+          Ver trabajos
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero-img {
+    animation: zoom 1.8s ease-out both;
+  }
+  .reveal {
+    animation: rise 0.8s ease-out both;
+    animation-delay: var(--d, 0s);
+  }
+
+  @keyframes zoom {
+    from {
+      transform: scale(1.1);
+    }
+  }
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-img,
+    .reveal {
+      animation: none;
+    }
+  }
+</style>

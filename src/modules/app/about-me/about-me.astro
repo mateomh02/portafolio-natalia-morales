@@ -1,0 +1,431 @@
+---
+// src/components/About.astro
+
+// PLACEHOLDERS: reemplazar por datos reales de Natalia
+const stats = [
+  { value: 10, suffix: "+", label: "Años de experiencia" },
+  { value: 150, suffix: "+", label: "Novias" },
+  { text: "Lifestyle", label: "Contenido para marcas" },
+];
+---
+
+<section
+  id="about-me"
+  class="relative overflow-hidden bg-white pt-28 pb-12 md:flex md:min-h-svh md:items-center"
+>
+  <!-- Palabra gigante de fondo -->
+  <p
+    data-watermark
+    aria-hidden="true"
+    class="font-primary pointer-events-none absolute top-1/2 left-0 -translate-y-1/2 select-none whitespace-nowrap text-[26vw] italic leading-none text-[#d386af17]"
+  >
+    Natalia Morales
+  </p>
+
+  <div class="relative z-10 mx-auto w-[85%] max-w-360">
+    <div class="grid items-center gap-16 md:grid-cols-[1.1fr_0.9fr] md:gap-20">
+      <!-- Texto -->
+      <div>
+        <p
+          data-label
+          class="font-secondary mb-5 text-xs uppercase tracking-[0.3em] text-rose-dark"
+        >
+          Sobre mí &amp; trayectoria
+        </p>
+
+        <h2
+          class="font-primary text-5xl uppercase leading-[1.03] text-[#d47fa9] xl:text-6xl"
+        >
+          <span class="block overflow-hidden pb-1"
+            ><span data-line class="block">El arte de</span></span
+          >
+          <span class="block overflow-hidden pb-1"
+            ><span data-line class="block">realzar la</span></span
+          >
+          <span class="block overflow-hidden pb-1">
+            <span data-line class="block">
+              belleza <em class="normal-case italic text-text">auténtica</em>
+            </span>
+          </span>
+        </h2>
+
+        <p
+          data-fade
+          class="font-secondary mt-7 max-w-xl text-base leading-relaxed text-text-dark/90 lg:text-lg"
+        >
+          Soy Natalia, maquilladora profesional y creadora de contenido con
+          experiencia en belleza, lifestyle y colaboraciones con marcas. Mi
+          trayectoria frente a cámara me permite crear contenido auténtico y
+          visualmente cuidado. Transformo productos y experiencias en historias
+          naturales, aspiracionales y cercanas.
+        </p>
+
+        <div
+          data-divider
+          class="mt-9 h-px w-full max-w-xl origin-left bg-text-dark/30"
+        >
+        </div>
+
+        <ul class="grid max-w-xl grid-cols-3 divide-x divide-text-dark/25 pt-6">
+          {
+            stats.map((s) => (
+              <li data-stat class="px-3 text-center first:pl-0 last:pr-0">
+                <p class="font-primary text-4xl text-text-dark lg:text-5xl">
+                  {s.value !== undefined ? (
+                    <span data-count={s.value} data-suffix={s.suffix}>
+                      {s.value}
+                      {s.suffix}
+                    </span>
+                  ) : (
+                    <span class="uppercase tracking-wide">{s.text}</span>
+                  )}
+                </p>
+                <p class="font-secondary mt-1 text-[0.65rem] uppercase tracking-[0.15em] text-text">
+                  {s.label}
+                </p>
+              </li>
+            ))
+          }
+        </ul>
+
+        <div data-fade class="mt-9">
+          <a
+            href="/portfolio"
+            class="inline-block rounded-full bg-[#d47fa9] px-8 py-3 font-medium text-white transition hover:-translate-y-0.5 hover:bg-[#a36584]"
+          >
+            Ver portafolio
+          </a>
+        </div>
+      </div>
+
+      <!-- Foto -->
+      <div class="relative mx-auto aspect-[4/5] w-full max-w-md">
+        <!-- Rectángulo claro detrás -->
+        <div
+          data-beige
+          class="absolute -top-6 -right-6 h-[94%] w-[78%] bg-surface/70"
+        >
+        </div>
+
+        <!-- Trazos de pincel -->
+        <svg
+          viewBox="0 0 160 80"
+          class="pointer-events-none absolute -top-12 -right-10 z-10 w-40 text-rose-dark"
+          fill="none"
+          stroke="currentColor"
+          stroke-linecap="round"
+          aria-hidden="true"
+        >
+          <path
+            data-stroke
+            pathLength="1"
+            stroke-dasharray="1"
+            stroke-width="5"
+            opacity=".45"
+            d="M4 72 C 40 32, 100 10, 156 6"></path>
+          <path
+            data-stroke
+            pathLength="1"
+            stroke-dasharray="1"
+            stroke-width="2"
+            opacity=".7"
+            d="M22 78 C 62 46, 112 28, 150 22"></path>
+        </svg>
+        <svg
+          viewBox="0 0 160 100"
+          class="pointer-events-none absolute -right-14 -bottom-8 z-10 w-44 text-rose-dark"
+          fill="none"
+          stroke="currentColor"
+          stroke-linecap="round"
+          aria-hidden="true"
+        >
+          <path
+            data-stroke
+            pathLength="1"
+            stroke-dasharray="1"
+            stroke-width="4"
+            opacity=".45"
+            d="M6 94 C 50 80, 110 50, 154 6"></path>
+          <path
+            data-stroke
+            pathLength="1"
+            stroke-dasharray="1"
+            stroke-width="1.5"
+            opacity=".75"
+            d="M30 98 C 74 88, 124 60, 158 22"></path>
+        </svg>
+
+        <!-- Contorno del arco, desplazado -->
+        <div
+          data-outline
+          class="absolute top-3 left-3 h-full w-[88%] rounded-t-[999px] border border-text-dark/35"
+        >
+        </div>
+
+        <!-- Foto con máscara de arco -->
+        <div
+          data-mask
+          class="absolute top-0 left-0 h-full w-[88%] overflow-hidden rounded-t-[999px] rounded-b-md shadow-[0_25px_60px_rgb(74_52_39/0.2)]"
+        >
+          <img
+            data-img
+            src="/portafolio.png"
+            alt="Natalia Morales maquillando, retrato profesional"
+            class="absolute -top-[9%] left-0 h-[118%] w-full object-cover object-top"
+            decoding="async"
+          />
+        </div>
+
+        <!-- Etiqueta con nombre -->
+        <div
+          data-tag
+          class="absolute -bottom-5 left-[12%] z-20 bg-white px-7 py-3 text-center shadow-[0_10px_30px_rgb(74_52_39/0.18)]"
+        >
+          <p
+            class="font-primary text-xl uppercase tracking-wide text-text-dark"
+          >
+            Natalia Morales
+          </p>
+          <p
+            class="font-secondary text-[0.6rem] uppercase tracking-[0.25em] text-text"
+          >
+            Maquilladora profesional
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  import gsap from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  const root = document.getElementById("about-me");
+
+  if (root) {
+    const q = gsap.utils.selector(root);
+    const ARCH = "round 999px 999px 6px 6px";
+    const maskClosed = `inset(100% 0% 0% 0% ${ARCH})`;
+    const maskOpen = `inset(0% 0% 0% 0% ${ARCH})`;
+
+    const countTo = (el: HTMLElement, o: { v: number }) => {
+      el.textContent = `${Math.round(o.v)}${el.dataset.suffix ?? ""}`;
+    };
+
+    const mm = gsap.matchMedia();
+
+    mm.add(
+      {
+        pinned:
+          "(min-width: 768px) and (min-height: 800px) and (prefers-reduced-motion: no-preference)",
+        flow: "(not ((min-width: 768px) and (min-height: 800px))) and (prefers-reduced-motion: no-preference)",
+      },
+      (ctx) => {
+        const { pinned } = ctx.conditions as { pinned: boolean };
+
+        if (pinned) {
+          // ESCRITORIO: la sección se fija y el scroll arma todo el diseño
+          const tl = gsap.timeline({
+            defaults: { ease: "power2.out" },
+            scrollTrigger: {
+              trigger: root,
+              start: "top top",
+              end: "+=180%",
+              scrub: 1,
+              pin: true,
+              anticipatePin: 1,
+            },
+          });
+
+          tl.from(q("[data-label]"), { y: 16, opacity: 0, duration: 0.5 }, 0.1)
+            .from(
+              q("[data-line]"),
+              { yPercent: 115, duration: 0.8, stagger: 0.15 },
+              0.15,
+            )
+            .fromTo(
+              q("[data-beige]"),
+              { clipPath: "inset(100% 0% 0% 0%)" },
+              {
+                clipPath: "inset(0% 0% 0% 0%)",
+                duration: 0.9,
+                ease: "power3.inOut",
+              },
+              0.3,
+            )
+            .fromTo(
+              q("[data-mask]"),
+              { clipPath: maskClosed },
+              { clipPath: maskOpen, duration: 1.2, ease: "power3.inOut" },
+              0.5,
+            )
+            .from(q("[data-img]"), { scale: 1.3, duration: 1.8 }, 0.5)
+            .from(
+              q("[data-outline]"),
+              { opacity: 0, x: -14, y: -14, duration: 0.8 },
+              1.1,
+            )
+            .from(
+              q("[data-fade]"),
+              { y: 24, opacity: 0, duration: 0.7, stagger: 1.5 },
+              0.9,
+            )
+            .from(q("[data-divider]"), { scaleX: 0, duration: 0.8 }, 1.3)
+            .from(
+              q("[data-stat]"),
+              { y: 20, opacity: 0, duration: 0.6, stagger: 0.18 },
+              1.5,
+            )
+            .fromTo(
+              q("[data-stroke]"),
+              { strokeDashoffset: 1 },
+              {
+                strokeDashoffset: 0,
+                duration: 1.2,
+                stagger: 0.25,
+                ease: "power1.inOut",
+              },
+              1.4,
+            )
+            .from(q("[data-tag]"), { y: 28, opacity: 0, duration: 0.7 }, 2.2)
+            // Parallax de la foto y desplazamiento de la palabra de fondo
+            .fromTo(
+              q("[data-img]"),
+              { yPercent: -6 },
+              { yPercent: 6, duration: 3.6, ease: "none" },
+              0,
+            )
+            .fromTo(
+              q("[data-watermark]"),
+              { xPercent: 6 },
+              { xPercent: -28, duration: 3.6, ease: "none" },
+              0,
+            );
+
+          // Contadores ligados al mismo scroll
+          q("[data-count]").forEach((el) => {
+            const o = { v: 0 };
+            const node = el as HTMLElement;
+            countTo(node, o);
+            tl.to(
+              o,
+              {
+                v: Number(node.dataset.count),
+                duration: 1,
+                ease: "power1.out",
+                onUpdate: () => countTo(node, o),
+              },
+              1.6,
+            );
+          });
+
+          tl.to({}, { duration: 0.6 }); // pausa final antes de soltar la sección
+        } else {
+          // PANTALLAS PEQUEÑAS: sin pin, cada bloque avanza con el scroll
+          const sc = (
+            trigger: Element,
+            start = "top 90%",
+            end = "top 55%",
+          ) => ({
+            trigger,
+            start,
+            end,
+            scrub: 1,
+          });
+          const mask = q("[data-mask]")[0];
+
+          gsap.fromTo(
+            q("[data-watermark]"),
+            { xPercent: 6 },
+            {
+              xPercent: -45,
+              ease: "none",
+              scrollTrigger: sc(root, "top bottom", "bottom top"),
+            },
+          );
+          gsap.from(q("[data-label]"), {
+            y: 16,
+            opacity: 0,
+            scrollTrigger: sc(q("[data-label]")[0]),
+          });
+          gsap.from(q("[data-line]"), {
+            yPercent: 115,
+            stagger: 0.15,
+            scrollTrigger: sc(q("[data-line]")[0], "top 92%", "top 55%"),
+          });
+          q("[data-fade]").forEach((el) =>
+            gsap.from(el, { y: 24, opacity: 0, scrollTrigger: sc(el) }),
+          );
+          gsap.from(q("[data-divider]"), {
+            scaleX: 0,
+            scrollTrigger: sc(q("[data-divider]")[0]),
+          });
+          gsap.from(q("[data-stat]"), {
+            y: 20,
+            opacity: 0,
+            stagger: 0.15,
+            scrollTrigger: sc(q("[data-stat]")[0], "top 92%", "top 60%"),
+          });
+          q("[data-count]").forEach((el) => {
+            const o = { v: 0 };
+            const node = el as HTMLElement;
+            countTo(node, o);
+            gsap.to(o, {
+              v: Number(node.dataset.count),
+              ease: "none",
+              onUpdate: () => countTo(node, o),
+              scrollTrigger: sc(node, "top 92%", "top 60%"),
+            });
+          });
+          gsap.fromTo(
+            q("[data-beige]"),
+            { clipPath: "inset(100% 0% 0% 0%)" },
+            {
+              clipPath: "inset(0% 0% 0% 0%)",
+              ease: "power2.inOut",
+              scrollTrigger: sc(mask, "top 90%", "top 40%"),
+            },
+          );
+          gsap.fromTo(
+            q("[data-mask]"),
+            { clipPath: maskClosed },
+            {
+              clipPath: maskOpen,
+              ease: "power2.inOut",
+              scrollTrigger: sc(mask, "top 90%", "top 30%"),
+            },
+          );
+          gsap.from(q("[data-img]"), {
+            scale: 1.3,
+            ease: "none",
+            scrollTrigger: sc(mask, "top 90%", "bottom 40%"),
+          });
+          gsap.fromTo(
+            q("[data-stroke]"),
+            { strokeDashoffset: 1 },
+            {
+              strokeDashoffset: 0,
+              stagger: 0.2,
+              ease: "none",
+              scrollTrigger: sc(mask, "top 70%", "bottom 50%"),
+            },
+          );
+          gsap.from(q("[data-outline]"), {
+            opacity: 0,
+            x: -14,
+            y: -14,
+            scrollTrigger: sc(mask, "top 80%", "top 40%"),
+          });
+          gsap.from(q("[data-tag]"), {
+            y: 28,
+            opacity: 0,
+            scrollTrigger: sc(q("[data-tag]")[0], "top 95%", "top 70%"),
+          });
+        }
+      },
+    );
+  }
+</script>

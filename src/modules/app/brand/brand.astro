@@ -1,0 +1,166 @@
+---
+// src/components/Brands.astro
+const brands = [
+  { name: "CeraVe", src: "/brand/cerave.png" },
+  { name: "Farmatodo", src: "/brand/farmatodo.png" },
+  { name: "inDrive", src: "/brand/inDrive.png" },
+  { name: "L'Oréal", src: "/brand/loreal.png" },
+  { name: "Neutrogena", src: "/brand/neutrogena.png" },
+  { name: "Rappi", src: "/brand/rappi.png" },
+  { name: "Savital", src: "/brand/savital.png" },
+  { name: "Temu", src: "/brand/temu.png" },
+  // { name: "Dove", src: "/brand/dove.png" }, // el archivo estaba vacío (0 bytes)
+];
+---
+
+<section id="brands" class="bg-rose pt-28 pb-14 md:pt-32 md:pb-20">
+  <div
+    class="mx-auto grid w-[85%] max-w-360 items-end gap-5 md:grid-cols-[1.3fr_1fr] md:gap-12"
+  >
+    <div>
+      <p
+        data-fade
+        class="font-secondary mb-3 text-xs uppercase tracking-[0.3em] text-rose-dark"
+      >
+        Colaboraciones
+      </p>
+      <h2
+        class="font-primary text-5xl leading-[1.02] text-text-dark lg:text-6xl"
+      >
+        <span class="block overflow-hidden pb-1">
+          <span data-line class="block">Marcas con las que</span>
+        </span>
+        <span class="block overflow-hidden pb-1">
+          <span data-line class="block">
+            he <em class="italic text-rose-dark">trabajado</em>
+          </span>
+        </span>
+      </h2>
+    </div>
+
+    <p
+      data-fade
+      class="font-secondary max-w-md text-base leading-relaxed text-text md:justify-self-end md:pb-2 lg:text-lg"
+    >
+      Historias de belleza y lifestyle creadas junto a marcas que conectan con
+      su audiencia.
+    </p>
+  </div>
+
+  <!-- Slider infinito -->
+  <div
+    data-marquee
+    class="mt-8 w-full overflow-hidden py-3 md:mt-10 [-webkit-mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)] [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)] motion-reduce:[mask-image:none]"
+  >
+    <div
+      data-track
+      class="flex w-max will-change-transform motion-reduce:w-full motion-reduce:justify-center"
+    >
+      {
+        [0, 1].map((copy) => (
+          <ul
+            class:list={[
+              "flex min-w-[100vw] shrink-0 items-center justify-around gap-6 pr-6",
+              "motion-reduce:min-w-0 motion-reduce:flex-wrap motion-reduce:justify-center motion-reduce:pr-0",
+              copy === 1 && "motion-reduce:hidden",
+            ]}
+            aria-hidden={copy === 1 ? "true" : undefined}
+          >
+            {brands.map((b) => (
+              <li class="flex h-24 w-44 shrink-0 items-center justify-center rounded-2xl bg-surface px-5 opacity-70 grayscale transition duration-500 hover:opacity-100 hover:grayscale-0">
+                <img
+                  src={b.src}
+                  alt={copy === 0 ? b.name : ""}
+                  class="h-11 w-auto max-w-32 object-contain"
+                  decoding="async"
+                  draggable="false"
+                />
+              </li>
+            ))}
+          </ul>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<script>
+  import gsap from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  const root = document.getElementById("brands");
+
+  if (root) {
+    const q = gsap.utils.selector(root);
+    const mm = gsap.matchMedia();
+
+    mm.add("(prefers-reduced-motion: no-preference)", () => {
+      // Entrada: título y textos (los logos NO se animan, así nunca quedan ocultos)
+      gsap.from(q("[data-line]"), {
+        yPercent: 115,
+        duration: 1,
+        stagger: 0.12,
+        ease: "power3.out",
+        scrollTrigger: { trigger: root, start: "top 80%", once: true },
+      });
+      gsap.from(q("[data-fade]"), {
+        y: 20,
+        opacity: 0,
+        duration: 0.9,
+        stagger: 0.15,
+        ease: "power3.out",
+        scrollTrigger: { trigger: root, start: "top 75%", once: true },
+      });
+      gsap.from(q("[data-marquee]"), {
+        opacity: 0,
+        y: 30,
+        duration: 1,
+        ease: "power2.out",
+        scrollTrigger: { trigger: root, start: "top 65%", once: true },
+      });
+
+      // Slider infinito: dos copias idénticas, se mueve la mitad del ancho
+      const marquee = q("[data-marquee]")[0] as HTMLElement;
+      const track = q("[data-track]")[0];
+      if (!marquee || !track) return;
+
+      const loop = gsap.to(track, {
+        xPercent: -50,
+        duration: 40,
+        ease: "none",
+        repeat: -1,
+      });
+
+      // Velocidad = hover (frena) x impulso del scroll (acelera y vuelve solo)
+      const state = { hover: 1, boost: 1 };
+      const onEnter = () => gsap.to(state, { hover: 0.2, duration: 0.6 });
+      const onLeave = () => gsap.to(state, { hover: 1, duration: 0.6 });
+      marquee.addEventListener("pointerenter", onEnter);
+      marquee.addEventListener("pointerleave", onLeave);
+
+      const tick = () => {
+        state.boost += (1 - state.boost) * 0.04;
+        loop.timeScale(state.hover * state.boost);
+      };
+      gsap.ticker.add(tick);
+
+      ScrollTrigger.create({
+        trigger: root,
+        start: "top bottom",
+        end: "bottom top",
+        onUpdate: (self) => {
+          const boost = 1 + Math.min(Math.abs(self.getVelocity()) / 500, 3);
+          state.boost = Math.max(state.boost, boost);
+        },
+      });
+
+      return () => {
+        gsap.ticker.remove(tick);
+        marquee.removeEventListener("pointerenter", onEnter);
+        marquee.removeEventListener("pointerleave", onLeave);
+      };
+    });
+  }
+</script>
