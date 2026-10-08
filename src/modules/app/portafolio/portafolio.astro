@@ -1,0 +1,436 @@
+---
+// src/components/Portfolio.astro
+
+// Normaliza BASE_URL para no generar rutas con "//"
+const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+const asset = (file: string) => `${base}/portafolio/${file}`;
+
+// Pon tus fotos en public/portfolio/ (o cambia los nombres de archivo aquí)
+const looks = [
+  {
+    title: "Maquillaje social",
+    description:
+      "Looks para eventos, cenas y celebraciones: piel luminosa, acabado natural y un resultado que se siente fresco todo el día.",
+    image: asset("maquillaje-social/maquillaje-social-2.jpeg"),
+    alt: "Look de maquillaje social con piel luminosa",
+    speed: 0.6,
+    redirect: "/social",
+  },
+  {
+    title: "Quinceañeras",
+    description:
+      "Un maquillaje delicado y juvenil para su gran día, que resalta su esencia y se ve increíble en fotos.",
+    image: asset("15/15-3.jpeg"),
+    alt: "Look de maquillaje para quinceañera",
+    speed: 1.2,
+    redirect: "quinceaneras",
+  },
+  {
+    title: "Novias",
+    description:
+      "Un acabado elegante y atemporal, pensado para verse impecable desde la ceremonia hasta el último baile.",
+    image: asset("/novia/novia-1.jpeg"),
+    alt: "Look de maquillaje de novia",
+    speed: 0.6,
+    redirect: "novias",
+  },
+];
+---
+
+<section id="portfolio" class="overflow-hidden bg-white pt-32 pb-20 md:pt-40 md:pb-28">
+  <div class="mx-auto w-[85%] max-w-360">
+    <!-- Encabezado -->
+    <div class="flex flex-col">
+      <div>
+        <h1
+          data-head
+          class="font-secondary mb-3 text-4xl uppercase tracking-[0.3em] text-primary-dark"
+        >
+          Portafolio
+      </h1>
+      </div>
+      <p
+        data-head
+        class="font-secondary max-w-md text-base leading-relaxed text-text md:justify-self-end md:pb-2 lg:text-lg"
+      >
+        Elige una categoría para ver el look más de cerca.
+      </p>
+    </div>
+ 
+    <!-- Galería -->
+    <ul class="mt-14 grid gap-14 md:mt-20 md:grid-cols-3 md:gap-8 lg:gap-14">
+      {
+        looks.map((look, i) => (
+          <li
+  data-tile
+  class="group relative has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-8 has-[:focus-visible]:outline-primary md:[&:nth-child(2)]:mt-14"
+>
+  <button
+    type="button"
+    data-open
+    data-title={look.title}
+    data-desc={look.description}
+    data-src={look.image}
+    data-alt={look.alt}
+    aria-label={`Ver ${look.title}`}
+    data-redirect={`${base}/portafolio#${look.redirect}`}
+    class="block w-full cursor-pointer text-left"
+  >
+    <div data-card class="relative aspect-[3/4] w-full">
+      <!-- Contorno desplazado: siempre visible -->
+      <div
+        data-outline
+        class="absolute inset-0 translate-x-2.5 translate-y-2.5 rounded-t-[999px] rounded-b-md border border-primary/40 transition duration-500 group-hover:translate-x-4 group-hover:translate-y-4"
+      >
+      </div>
+
+      <!-- Foto en arco -->
+      <div
+        data-frame
+        class="absolute inset-0 overflow-hidden rounded-t-[999px] rounded-b-md bg-primary-soft shadow-[0_25px_60px_rgb(61_16_48/0.15)]"
+      >
+        <img
+          data-img
+          src={look.image}
+          alt={look.alt}
+          class="absolute inset-0 h-full w-full max-w-none object-cover object-top transition-transform duration-700 group-hover:scale-105"
+          loading="eager"
+          decoding="async"
+        />
+      </div>
+    </div>
+  </button>
+
+  <!-- Texto (fuera del botón) -->
+  <div class="mt-9">
+    <p data-info class="font-secondary text-xs uppercase tracking-[0.3em] text-primary-dark">
+      {`0${i + 1}`}
+    </p>
+    <h3 data-info class="font-primary mt-2 text-3xl leading-tight text-text-dark lg:text-4xl">
+      {look.title}
+    </h3>
+    <p data-info class="font-secondary mt-3 max-w-sm leading-relaxed text-text">
+      {look.description}
+    </p>
+    <a
+      data-info
+      href={`${base}/portafolio#${look.redirect}`}
+      class="font-secondary mt-4 inline-flex items-center gap-2 text-sm font-medium uppercase tracking-[0.15em] text-primary-dark"
+    >
+      Ver más <span class="transition-transform duration-300 group-hover:translate-x-1">→</span>
+    </a>
+  </div>
+</li>
+        ))
+      }
+    </ul>
+ 
+    <!-- Cierre -->
+    <div class="mt-12.5 pt-12.5 border-t border-primary text-center" data-head>
+      <p class="font-primary text-3xl text-text-dark lg:text-4xl">
+        <!-- ¿Te gusta algún <em class="italic text-primary">look</em>? -->
+         <h2
+        class="font-secondary mt-3 text-3xl font-semibold leading-[1.1] tracking-tight text-text-dark lg:text-5xl"
+      >
+        Tu belleza, en su máxima<span class="text-primary"> expresión</span>
+      </h2>
+      </p>
+      <a
+      href={`${base}/servicios`}
+      class="font-secondary mt-7 inline-flex items-center gap-2 rounded-full bg-primary-dark px-8 py-4 font-medium text-white transition hover:-translate-y-0.5 hover:bg-text-dark"
+    >
+      Ver todos los servicios
+      <span aria-hidden="true">→</span>
+    </a>
+    </div>
+  </div>
+</section>
+ 
+<!-- Lightbox -->
+<dialog
+  id="lightbox"
+  aria-labelledby="lb-title"
+  class="m-0 h-full max-h-none w-full max-w-none overflow-x-hidden overflow-y-auto bg-transparent p-4 open:flex backdrop:bg-text-dark/60 backdrop:backdrop-blur-sm"
+>
+  <div
+    data-lb-panel
+    class="relative isolate m-auto grid w-full max-w-5xl md:grid-cols-[0.9fr_1.1fr]"
+  >
+    <!-- Fondo blanco del panel (se anima aparte para que la foto pueda "volar" encima) -->
+    <div
+      data-lb-bg
+      class="absolute inset-0 -z-10 rounded-3xl bg-white shadow-[0_40px_100px_rgb(61_16_48/0.35)]"
+    >
+    </div>
+ 
+    <button
+      type="button"
+      data-lb-close
+      aria-label="Cerrar"
+      class="absolute top-4 right-4 z-10 grid h-11 w-11 place-items-center rounded-full bg-white text-text-dark shadow-md transition hover:bg-primary-soft"
+    >
+      <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <path d="M6 6l12 12M18 6L6 18" />
+      </svg>
+    </button>
+ 
+    <div
+      data-lb-side
+      class="flex items-center justify-center rounded-t-3xl bg-primary-soft p-8 md:rounded-l-3xl md:rounded-tr-none md:p-10"
+    >
+      <div
+        data-lb-frame
+        class="relative aspect-[3/4] w-full max-w-sm overflow-hidden rounded-t-[999px] rounded-b-md bg-white"
+      >
+        <img data-lb-img src="" alt="" class="h-full w-full object-cover object-top" />
+      </div>
+    </div>
+ 
+    <div data-lb-text class="flex flex-col justify-center gap-4 p-8 md:p-12">
+      <div class="h-1/2 flex flex-col justify-end gap-4">
+        <p data-lb-count class="font-secondary text-xs uppercase tracking-[0.3em] text-primary-dark"></p>
+        <h3 id="lb-title" data-lb-title class="font-primary text-5xl leading-none text-primary lg:text-6xl"></h3>
+        <p data-lb-desc class="font-secondary max-w-md text-lg leading-relaxed text-text"></p>
+
+      </div>
+
+      <div class="mt-4 flex flex-col h-1/2 justify-between">
+        <div class="flex flex-wrap items-center gap-3 ">
+          <a
+            href="/services"
+            class="rounded-full bg-primary-dark px-8 py-3 font-medium text-white transition hover:-translate-y-0.5 hover:bg-text-dark"
+          >
+            Reservar cita
+          </a>
+
+          <a
+    data-lb-more
+    href="#"
+    class="font-secondary inline-flex items-center gap-2 self-start text-sm font-medium uppercase tracking-[0.15em] text-primary-dark transition hover:bg-primary/5 border-primary border rounded-full h-full px-4"
+  >
+    Ver más <span>→</span>
+  </a>
+        </div>
+        <div class="flex gap-4 justify-end">
+            <button
+              type="button"
+              data-lb-prev
+              class="rounded-full border border-primary/50 px-5 py-3 text-sm text-text-dark transition hover:bg-primary-soft"
+            >
+              ← Anterior
+            </button>
+            <button
+              type="button"
+              data-lb-next
+              class="rounded-full border border-primary/50 px-5 py-3 text-sm text-text-dark transition hover:bg-primary-soft"
+            >
+              Siguiente →
+            </button>
+          </div>
+      </div>
+    </div>
+  </div>
+</dialog>
+ 
+<style>
+  @keyframes lb-fade {
+    from {
+      opacity: 0;
+    }
+  }
+  #lightbox[open]::backdrop {
+    animation: lb-fade 0.4s ease-out;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    #lightbox[open]::backdrop {
+      animation: none;
+    }
+  }
+</style>
+ 
+<script>
+  import gsap from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  const PILL = "inset(20% 24% 20% 24% round 999px 999px 999px 999px)";
+  const ARCH = "inset(0% 0% 0% 0% round 999px 999px 6px 6px)";
+  const SIDE_OFF = "rgba(255,227,240,0)";
+  const SIDE_ON = "rgb(255,227,240)";
+
+  let mm: gsap.MatchMedia | null = null;
+
+  function init() {
+    const root = document.getElementById("portfolio");
+    const dlg = document.getElementById("lightbox") as HTMLDialogElement | null;
+    if (!root || !dlg || root.dataset.ready) return; // evita doble inicio
+    root.dataset.ready = "true";
+
+    const q = gsap.utils.selector(root);
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    /* ---------- 1) Scroll: la píldora se abre hasta ser arco ---------- */
+    mm = gsap.matchMedia();
+    mm.add("(prefers-reduced-motion: no-preference)", () => {
+      gsap.from(q("[data-head]"), { opacity: 0, y: 16, duration: 0.9, stagger: 0.12, delay: 0.25, ease: "power3.out" });
+
+      q("[data-tile]").forEach((el) => {
+        const tile = el as HTMLElement;
+
+        gsap
+          .timeline({
+            defaults: { ease: "none" },
+            scrollTrigger: { trigger: tile, start: "top 96%", end: "top 50%", scrub: 1 },
+          })
+          .fromTo(tile.querySelector("[data-frame]"), { clipPath: PILL }, { clipPath: ARCH }, 0)
+          .fromTo(tile.querySelector("[data-img]"), { scale: 1.35 }, { scale: 1 }, 0);
+
+        gsap.from(tile.querySelectorAll("[data-info]"), {
+          y: 30,
+          opacity: 0,
+          stagger: 0.12,
+          ease: "none",
+          scrollTrigger: { trigger: tile, start: "top 78%", end: "top 38%", scrub: 1 },
+        });
+      });
+    });
+
+    /* ---------- 2) Lightbox ---------- */
+    const items = Array.from(root.querySelectorAll<HTMLButtonElement>("[data-open]"));
+    const $ = <T extends HTMLElement>(sel: string) => dlg.querySelector<T>(sel)!;
+
+    const bg = $("[data-lb-bg]");
+    const side = $("[data-lb-side]");
+    const frame = $("[data-lb-frame]");
+    const img = $<HTMLImageElement>("[data-lb-img]");
+    const title = $("[data-lb-title]");
+    const desc = $("[data-lb-desc]");
+    const count = $("[data-lb-count]");
+    const closeBtn = $("[data-lb-close]");
+    const texts = Array.from(dlg.querySelectorAll<HTMLElement>("[data-lb-text] > *"));
+const more = $<HTMLAnchorElement>("[data-lb-more]");
+
+    let current = 0;
+    let busy = false;
+    let closing = false;
+
+    const fill = (i: number) => {
+      const b = items[i];
+      img.src = b.dataset.src ?? "";
+      img.alt = b.dataset.alt ?? "";
+      title.textContent = b.dataset.title ?? "";
+      desc.textContent = b.dataset.desc ?? "";
+      count.textContent = `0${i + 1} / 0${items.length}`;
+      more.href = b.dataset.redirect ?? "#"; // <- nueva
+    };
+
+    const flipFor = (i: number) => {
+      const src = items[i].closest("[data-tile]")?.querySelector<HTMLElement>("[data-frame]");
+      if (!src) return { x: 0, y: 0, scale: 0.9 };
+      const a = src.getBoundingClientRect();
+      const b = frame.getBoundingClientRect();
+      return {
+        x: a.left + a.width / 2 - (b.left + b.width / 2),
+        y: a.top + a.height / 2 - (b.top + b.height / 2),
+        scale: a.width / b.width,
+      };
+    };
+
+    const openAt = (i: number) => {
+      current = i;
+      fill(i);
+      dlg.showModal();
+      document.documentElement.style.overflow = "hidden";
+      if (reduce) return;
+
+      const f = flipFor(i);
+      gsap
+        .timeline({ defaults: { ease: "power3.out" } })
+        .fromTo(frame, { x: f.x, y: f.y, scale: f.scale }, { x: 0, y: 0, scale: 1, duration: 1, ease: "power4.inOut" }, 0)
+        .from(img, { scale: 1.2, duration: 1.2 }, 0)
+        .fromTo(bg, { opacity: 0, scale: 0.96 }, { opacity: 1, scale: 1, duration: 0.7 }, 0.3)
+        .fromTo(side, { backgroundColor: SIDE_OFF }, { backgroundColor: SIDE_ON, duration: 0.6, ease: "none" }, 0.35)
+        .from([closeBtn, ...texts], { x: 24, opacity: 0, duration: 0.6, stagger: 0.07 }, 0.55);
+    };
+
+    const finish = () => {
+      dlg.close();
+      document.documentElement.style.overflow = "";
+      gsap.set([frame, img, bg, side, closeBtn, ...texts], { clearProps: "all" });
+      items[current]?.focus({ preventScroll: true });
+      closing = false;
+    };
+
+    const close = () => {
+      if (!dlg.open || closing) return;
+      if (reduce) return finish();
+      closing = true;
+
+      const f = flipFor(current);
+      gsap
+        .timeline({ onComplete: finish })
+        .to([closeBtn, ...texts], { opacity: 0, x: 12, duration: 0.25, stagger: 0.03, ease: "power2.in" }, 0)
+        .to(side, { backgroundColor: SIDE_OFF, duration: 0.3, ease: "none" }, 0)
+        .to(bg, { opacity: 0, scale: 0.97, duration: 0.35, ease: "power2.in" }, 0.1)
+        .to(frame, { x: f.x, y: f.y, scale: f.scale, duration: 0.7, ease: "power4.inOut" }, 0.1);
+    };
+
+    const go = (dir: number) => {
+      if (busy || closing) return;
+      const next = (current + dir + items.length) % items.length;
+      if (reduce) {
+        current = next;
+        fill(next);
+        return;
+      }
+      busy = true;
+      const targets = [frame, ...texts];
+      gsap
+        .timeline({ onComplete: () => (busy = false) })
+        .to(targets, {
+          opacity: 0,
+          x: -dir * 30,
+          duration: 0.25,
+          ease: "power2.in",
+          onComplete: () => {
+            current = next;
+            fill(next);
+          },
+        })
+        .fromTo(
+          targets,
+          { x: dir * 30, opacity: 0 },
+          { x: 0, opacity: 1, duration: 0.55, stagger: 0.05, ease: "power3.out" },
+        );
+    };
+
+    items.forEach((b, i) => b.addEventListener("click", () => openAt(i)));
+    closeBtn.addEventListener("click", close);
+    dlg.querySelector("[data-lb-prev]")?.addEventListener("click", () => go(-1));
+    dlg.querySelector("[data-lb-next]")?.addEventListener("click", () => go(1));
+    dlg.addEventListener("click", (e) => {
+      if (e.target === dlg) close();
+    });
+    dlg.addEventListener("cancel", (e) => {
+      e.preventDefault();
+      close();
+    });
+    dlg.addEventListener("keydown", (e) => {
+      if (e.key === "ArrowRight") go(1);
+      if (e.key === "ArrowLeft") go(-1);
+    });
+  }
+
+  // Limpiar antes de salir de la página (view transitions)
+  document.addEventListener("astro:before-swap", () => {
+    mm?.revert();
+    mm = null;
+    ScrollTrigger.getAll().forEach((t) => t.kill());
+    document.documentElement.style.overflow = "";
+  });
+
+  // Se ejecuta en la carga inicial y cada vez que vuelves a la página
+  document.addEventListener("astro:page-load", init);
+  init();
+</script>

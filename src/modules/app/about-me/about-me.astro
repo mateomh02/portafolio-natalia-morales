@@ -17,7 +17,7 @@ const stats = [
   <p
     data-watermark
     aria-hidden="true"
-    class="font-primary pointer-events-none absolute top-1/2 left-0 -translate-y-1/2 select-none whitespace-nowrap text-[26vw] italic leading-none text-[#d386af17]"
+    class="font-primary pointer-events-none absolute top-1/2 left-0 -translate-y-1/2 select-none whitespace-nowrap text-[26vw] italic leading-none text-primary-light/40 opacity-20 md:text-[20vw] lg:text-[18vw] xl:text-[16vw]"
   >
     Natalia Morales
   </p>
@@ -28,13 +28,13 @@ const stats = [
       <div>
         <p
           data-label
-          class="font-secondary mb-5 text-xs uppercase tracking-[0.3em] text-rose-dark"
+          class="font-secondary mb-5 text-xs uppercase tracking-[0.3em] text-primary-dark"
         >
           Sobre mí &amp; trayectoria
         </p>
 
         <h2
-          class="font-primary text-5xl uppercase leading-[1.03] text-[#d47fa9] xl:text-6xl"
+          class="font-primary text-5xl uppercase leading-[1.03] text-primary xl:text-6xl"
         >
           <span class="block overflow-hidden pb-1"
             ><span data-line class="block">El arte de</span></span
@@ -44,14 +44,16 @@ const stats = [
           >
           <span class="block overflow-hidden pb-1">
             <span data-line class="block">
-              belleza <em class="normal-case italic text-text">auténtica</em>
+              belleza <em class="normal-case italic text-text-dark"
+                >auténtica</em
+              >
             </span>
           </span>
         </h2>
 
         <p
           data-fade
-          class="font-secondary mt-7 max-w-xl text-base leading-relaxed text-text-dark/90 lg:text-lg"
+          class="font-secondary mt-7 max-w-xl text-base leading-relaxed text-text lg:text-lg"
         >
           Soy Natalia, maquilladora profesional y creadora de contenido con
           experiencia en belleza, lifestyle y colaboraciones con marcas. Mi
@@ -62,11 +64,13 @@ const stats = [
 
         <div
           data-divider
-          class="mt-9 h-px w-full max-w-xl origin-left bg-text-dark/30"
+          class="mt-9 h-px w-full max-w-xl origin-left bg-primary-light"
         >
         </div>
 
-        <ul class="grid max-w-xl grid-cols-3 divide-x divide-text-dark/25 pt-6">
+        <ul
+          class="grid max-w-xl grid-cols-3 divide-x divide-primary-light pt-6"
+        >
           {
             stats.map((s) => (
               <li data-stat class="px-3 text-center first:pl-0 last:pr-0">
@@ -80,7 +84,7 @@ const stats = [
                     <span class="uppercase tracking-wide">{s.text}</span>
                   )}
                 </p>
-                <p class="font-secondary mt-1 text-[0.65rem] uppercase tracking-[0.15em] text-text">
+                <p class="font-secondary mt-1 text-[0.65rem] uppercase tracking-[0.15em] text-primary-dark">
                   {s.label}
                 </p>
               </li>
@@ -91,7 +95,7 @@ const stats = [
         <div data-fade class="mt-9">
           <a
             href="/portfolio"
-            class="inline-block rounded-full bg-[#d47fa9] px-8 py-3 font-medium text-white transition hover:-translate-y-0.5 hover:bg-[#a36584]"
+            class="inline-block rounded-full bg-primary-dark px-8 py-3 font-medium text-white transition hover:-translate-y-0.5 hover:bg-text-dark"
           >
             Ver portafolio
           </a>
@@ -100,17 +104,17 @@ const stats = [
 
       <!-- Foto -->
       <div class="relative mx-auto aspect-[4/5] w-full max-w-md">
-        <!-- Rectángulo claro detrás -->
+        <!-- Rectángulo rosa suave detrás -->
         <div
           data-beige
-          class="absolute -top-6 -right-6 h-[94%] w-[78%] bg-surface/70"
+          class="absolute -top-6 -right-6 h-[94%] w-[78%] bg-primary-soft"
         >
         </div>
 
         <!-- Trazos de pincel -->
         <svg
           viewBox="0 0 160 80"
-          class="pointer-events-none absolute -top-12 -right-10 z-10 w-40 text-rose-dark"
+          class="pointer-events-none absolute -top-12 -right-10 z-10 w-40 text-primary"
           fill="none"
           stroke="currentColor"
           stroke-linecap="round"
@@ -133,7 +137,7 @@ const stats = [
         </svg>
         <svg
           viewBox="0 0 160 100"
-          class="pointer-events-none absolute -right-14 -bottom-8 z-10 w-44 text-rose-dark"
+          class="pointer-events-none absolute -right-14 -bottom-8 z-10 w-44 text-primary"
           fill="none"
           stroke="currentColor"
           stroke-linecap="round"
@@ -158,18 +162,18 @@ const stats = [
         <!-- Contorno del arco, desplazado -->
         <div
           data-outline
-          class="absolute top-3 left-3 h-full w-[88%] rounded-t-[999px] border border-text-dark/35"
+          class="absolute top-3 left-3 h-full w-[88%] rounded-t-[999px] border border-primary/40"
         >
         </div>
 
         <!-- Foto con máscara de arco -->
         <div
           data-mask
-          class="absolute top-0 left-0 h-full w-[88%] overflow-hidden rounded-t-[999px] rounded-b-md shadow-[0_25px_60px_rgb(74_52_39/0.2)]"
+          class="absolute top-0 left-0 h-full w-[88%] overflow-hidden rounded-t-[999px] rounded-b-md shadow-[0_25px_60px_rgb(61_16_48/0.2)]"
         >
           <img
             data-img
-            src={`${import.meta.env.BASE_URL}/portafolio.png`}
+            src={`${import.meta.env.BASE_URL}/profile-photo.png`}
             alt="Natalia Morales maquillando, retrato profesional"
             class="absolute -top-[9%] left-0 h-[118%] w-full object-cover object-top"
             decoding="async"
@@ -179,7 +183,7 @@ const stats = [
         <!-- Etiqueta con nombre -->
         <div
           data-tag
-          class="absolute -bottom-5 left-[12%] z-20 bg-white px-7 py-3 text-center shadow-[0_10px_30px_rgb(74_52_39/0.18)]"
+          class="absolute -bottom-5 left-[12%] z-20 bg-white px-7 py-3 text-center shadow-[0_10px_30px_rgb(61_16_48/0.18)]"
         >
           <p
             class="font-primary text-xl uppercase tracking-wide text-text-dark"
@@ -187,7 +191,7 @@ const stats = [
             Natalia Morales
           </p>
           <p
-            class="font-secondary text-[0.6rem] uppercase tracking-[0.25em] text-text"
+            class="font-secondary text-[0.6rem] uppercase tracking-[0.25em] text-primary-dark"
           >
             Maquilladora profesional
           </p>

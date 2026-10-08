@@ -1,0 +1,95 @@
+---
+import { services, wa } from "./data";
+const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+const photo = (file: string) => `${base}/servicios/${file}`;
+---
+
+<section class="bg-white pt-28 pb-[7vh]">
+  <div class="mx-auto w-[85%] max-w-6xl">
+    <header class="mb-14 text-center">
+      <p class="font-secondary text-sm font-medium uppercase tracking-[0.25em] text-primary-dark">
+        Servicios
+      </p>
+      <h1 class="font-secondary mt-3 text-3xl font-semibold leading-[1.1] tracking-tight text-text-dark lg:text-5xl">
+        Todo para tu <span class="text-primary">look</span>
+      </h1>
+    </header>
+
+    <div class="flex flex-col gap-16 md:gap-24">
+      {
+        services.map((s, i) => (
+          <article
+            id={s.slug}
+            class="grid scroll-mt-28 items-center gap-8 md:grid-cols-2 md:gap-16"
+          >
+            <!-- Foto en arco -->
+            <div
+              class:list={[
+                "relative mx-auto aspect-[4/5] w-full max-w-sm",
+                i % 2 === 1 && "md:order-2",
+              ]}
+            >
+              <div class="absolute inset-0 translate-x-3 translate-y-3 rounded-t-[999px] rounded-b-md border border-primary/40" />
+              <div class="absolute inset-0 overflow-hidden rounded-t-[999px] rounded-b-md bg-primary-soft shadow-[0_25px_60px_rgb(61_16_48/0.15)]">
+                <img
+                  src={photo(s.photo)}
+                  alt={s.alt}
+                  loading="lazy"
+                  decoding="async"
+                  class="h-full w-full object-cover object-top"
+                />
+              </div>
+              <span class="font-secondary absolute -top-2 -left-2 grid h-14 w-14 place-items-center rounded-full bg-white text-sm font-semibold text-primary-dark shadow-md">
+                {`0${i + 1}`}
+              </span>
+            </div>
+
+            <!-- Texto -->
+            <div class:list={["text-center md:text-left", i % 2 === 1 && "md:order-1"]}>
+              <span class="mx-auto grid h-14 w-14 place-items-center rounded-full bg-primary-soft text-primary-dark md:mx-0">
+                <svg
+                  viewBox="0 0 24 24"
+                  class="h-6 w-6"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                  set:html={s.icon}
+                />
+              </span>
+
+              <h2 class="font-secondary mt-5 text-3xl font-semibold text-text-dark lg:text-4xl">
+                {s.title}
+              </h2>
+              <p class="font-secondary mx-auto mt-4 max-w-md text-base leading-relaxed text-text md:mx-0 lg:text-lg">
+                {s.description}
+              </p>
+
+              <ul class="mt-5 flex flex-wrap justify-center gap-2 md:justify-start">
+                {
+                  s.items.map((item) => (
+                    <li class="font-secondary rounded-full bg-primary-soft px-4 py-1.5 text-sm text-text-dark">
+                      {item}
+                    </li>
+                  ))
+                }
+              </ul>
+
+              <a
+                href={wa(s.title)}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="font-secondary mt-8 inline-flex items-center gap-2 rounded-full bg-primary-dark px-8 py-4 font-medium text-white transition hover:-translate-y-0.5 hover:bg-text-dark"
+              >
+                Reservar {s.title.toLowerCase()}
+                <span aria-hidden="true">→</span>
+              </a>
+            </div>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</section>

@@ -1,0 +1,100 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import Gallery from "@/modules/app/portafolio/gallery.astro";
+import Video from "@/modules/app/portafolio/video.astro";
+
+const tabs = [
+  { id: "maquillaje", label: "Maquillaje" },
+  { id: "videos", label: "Videos con marcas" },
+];
+---
+
+<Layout>
+  <section class="bg-white pt-28 pb-8">
+    <div
+      class="mx-auto flex w-[85%] max-w-360 flex-col gap-6 border-b border-primary-light pb-8 md:flex-row md:items-end md:justify-between"
+    >
+      <div>
+        <p
+          class="font-secondary text-sm uppercase tracking-[0.25em] text-primary-dark"
+        >
+          Portafolio
+        </p>
+        <h1
+          class="font-primary text-5xl font-medium text-text-dark lg:text-7xl"
+        >
+          Mis <em class="text-primary">trabajos</em>
+        </h1>
+      </div>
+
+      <div
+        role="tablist"
+        aria-label="Secciones del portafolio"
+        class="flex w-full gap-1 rounded-full bg-primary-soft p-1.5 md:w-auto"
+      >
+        {
+          tabs.map((t, i) => (
+            <button
+              type="button"
+              role="tab"
+              id={`tab-${t.id}`}
+              aria-controls={`panel-${t.id}`}
+              aria-selected={i === 0 ? "true" : "false"}
+              data-tab={t.id}
+              class="cursor-pointer flex-1 rounded-full px-6 py-2.5 font-secondary text-sm font-medium text-primary-dark transition-colors duration-300 aria-selected:bg-primary-dark aria-selected:text-white md:flex-none"
+            >
+              {t.label}
+            </button>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <div
+    id="panel-maquillaje"
+    role="tabpanel"
+    aria-labelledby="tab-maquillaje"
+    data-panel="maquillaje"
+  >
+    <Gallery />
+  </div>
+
+  <div
+    id="panel-videos"
+    role="tabpanel"
+    aria-labelledby="tab-videos"
+    data-panel="videos"
+    hidden
+  >
+    <Video />
+  </div>
+</Layout>
+
+<script>
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+  const tabs = document.querySelectorAll<HTMLButtonElement>("[data-tab]");
+  const panels = document.querySelectorAll<HTMLElement>("[data-panel]");
+
+  function show(id: string, updateHash = true) {
+    panels.forEach((p) => {
+      const active = p.dataset.panel === id;
+      p.hidden = !active;
+      p.querySelectorAll<HTMLIFrameElement>("iframe[data-src]").forEach((f) => {
+        // Cargar al mostrar; vaciar al salir para detener el video
+        if (active) f.src = f.dataset.src!;
+        else f.removeAttribute("src");
+      });
+    });
+    tabs.forEach((t) =>
+      t.setAttribute("aria-selected", String(t.dataset.tab === id)),
+    );
+    if (updateHash) history.replaceState(null, "", `#${id}`);
+    requestAnimationFrame(() => ScrollTrigger.refresh());
+  }
+
+  tabs.forEach((t) => t.addEventListener("click", () => show(t.dataset.tab!)));
+
+  if (location.hash === "#videos") show("videos", false);
+</script>

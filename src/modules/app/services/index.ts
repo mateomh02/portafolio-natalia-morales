@@ -1,0 +1,1 @@
+export { default as AllServices } from './all-services.astro';

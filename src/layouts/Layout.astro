@@ -1,6 +1,7 @@
 ---
 import { Header } from "@/modules/app/header";
 import "../styles/global.css";
+import { ClientRouter } from "astro:transitions";
 ---
 
 <!doctype html>
@@ -19,6 +20,7 @@ import "../styles/global.css";
 
     <meta name="generator" content={Astro.generator} />
     <title>Astro Basics</title>
+    <ClientRouter />
   </head>
   <body>
     <Header />

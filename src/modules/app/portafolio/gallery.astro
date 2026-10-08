@@ -1,0 +1,159 @@
+---
+const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+const asset = (path: string) => `${base}/portafolio/${path.replace(/^\//, "")}`;
+
+// Para agregar más fotos, solo sube `count`
+const categories = [
+  {
+    id: "social",
+    title: "Maquillaje social",
+    folder: "maquillaje-social",
+    prefix: "maquillaje-social",
+    count: 3,
+    alt: "Look de maquillaje social",
+  },
+  {
+    id: "quinceaneras",
+    title: "Quinceañeras",
+    folder: "15",
+    prefix: "15",
+    count: 3,
+    alt: "Look de maquillaje para quinceañera",
+  },
+  {
+    id: "novias",
+    title: "Novias",
+    folder: "novia",
+    prefix: "novia",
+    count: 3,
+    alt: "Look de maquillaje de novia",
+  },
+].map((c) => ({
+  ...c,
+  photos: Array.from({ length: c.count }, (_, i) => ({
+    src: asset(`${c.folder}/${c.prefix}-${i + 1}.jpeg`),
+    alt: `${c.alt} ${i + 1}`,
+  })),
+}));
+---
+
+<section id="galeria" class="bg-white py-6">
+  <div class="mx-auto w-[85%] max-w-360">
+    {
+      categories.map((cat) => (
+        <section class="mb-20 last:mb-0" id={cat.id}>
+          <div class="mb-8 flex items-center justify-end gap-6">
+            <h3 class="font-primary text-4xl font-medium text-text-dark lg:text-5xl">
+              {cat.title}
+            </h3>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4 md:grid-cols-3  lg:gap-5">
+            {cat.photos.map((photo) => (
+              <button
+                type="button"
+                class="gallery-item group relative block aspect-4/5 cursor-pointer overflow-hidden rounded-3xl bg-primary-soft focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary-dark"
+                data-src={photo.src}
+                data-alt={photo.alt}
+                aria-label={`Ampliar: ${photo.alt}`}
+              >
+                <img
+                  src={photo.src}
+                  alt={photo.alt}
+                  loading="lazy"
+                  decoding="async"
+                  class="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                />
+              </button>
+            ))}
+          </div>
+        </section>
+      ))
+    }
+  </div>
+
+  <!-- Lightbox -->
+  <dialog
+    id="gallery-dialog"
+    class="m-auto overflow-visible bg-transparent p-0 backdrop:bg-text-dark/80 backdrop:backdrop-blur-sm"
+  >
+    <button
+      type="button"
+      id="gallery-close"
+      aria-label="Cerrar"
+      class="cursor-pointer absolute -top-12 right-0 flex h-10 w-10 items-center justify-center rounded-full bg-white text-xl text-text-dark"
+    >
+      ✕
+    </button>
+    <div id="gallery-frame" class="overflow-hidden rounded-3xl bg-primary-soft">
+      <img
+        id="gallery-img"
+        alt=""
+        class="h-full w-full object-cover opacity-0 transition-opacity duration-300"
+      />
+    </div>
+  </dialog>
+</section>
+
+<script>
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  // Lightbox
+  const dialog = document.getElementById("gallery-dialog") as HTMLDialogElement;
+  const frame = document.getElementById("gallery-frame") as HTMLDivElement;
+  const img = document.getElementById("gallery-img") as HTMLImageElement;
+
+  document
+    .querySelectorAll<HTMLButtonElement>(".gallery-item")
+    .forEach((btn) => {
+      btn.addEventListener("click", async () => {
+        // Misma forma que la miniatura
+        const { width, height } = btn.getBoundingClientRect();
+        const ratio = width / height;
+        frame.style.aspectRatio = `${width} / ${height}`;
+        frame.style.width = `min(90vw, calc(85svh * ${ratio}), 36rem)`;
+
+        // Ocultar la anterior antes de cambiar la fuente
+        img.classList.add("opacity-0");
+        img.src = btn.dataset.src ?? "";
+        img.alt = btn.dataset.alt ?? "";
+        dialog.showModal();
+
+        // Mostrar solo cuando la nueva ya cargó
+        try {
+          await img.decode();
+        } catch {}
+        img.classList.remove("opacity-0");
+      });
+    });
+
+  dialog.addEventListener("close", () => {
+    img.classList.add("opacity-0");
+    img.removeAttribute("src");
+  });
+
+  document
+    .getElementById("gallery-close")
+    ?.addEventListener("click", () => dialog.close());
+  dialog.addEventListener("click", (e) => {
+    if (e.target === dialog) dialog.close();
+  });
+
+  // Animación de entrada (solo transform + opacity)
+  const mm = gsap.matchMedia();
+  mm.add("(prefers-reduced-motion: no-preference)", () => {
+    gsap.utils.toArray<HTMLElement>(".gallery-item").forEach((el, i) => {
+      gsap.from(el, {
+        y: 50,
+        opacity: 0,
+        duration: 1,
+        ease: "power3.out",
+        delay: (i % 3) * 0.1,
+        scrollTrigger: { trigger: el, start: "top 92%", once: true },
+      });
+    });
+  });
+</script>

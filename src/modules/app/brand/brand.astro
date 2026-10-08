@@ -13,7 +13,7 @@ const brands = [
 ];
 ---
 
-<section id="brands" class="bg-rose pt-28 pb-14 md:pt-32 md:pb-20">
+<section id="brands" class="bg-primary-soft pt-28 pb-14 md:pt-32 md:pb-20">
   <div
     class="mx-auto grid w-[85%] max-w-360 items-end gap-5 md:grid-cols-[1.3fr_1fr] md:gap-12"
   >
@@ -67,7 +67,7 @@ const brands = [
             aria-hidden={copy === 1 ? "true" : undefined}
           >
             {brands.map((b) => (
-              <li class="flex h-24 w-44 shrink-0 items-center justify-center rounded-2xl bg-surface px-5 opacity-70 grayscale transition duration-500 hover:opacity-100 hover:grayscale-0">
+              <li class="flex h-24 w-44 shrink-0 items-center justify-center rounded-2xl bg-white px-5 opacity-70  transition duration-500 hover:opacity-100 hover:grayscale-0">
                 <img
                   src={`${import.meta.env.BASE_URL}${b.src}`}
                   alt={copy === 0 ? b.name : ""}
@@ -128,7 +128,7 @@ const brands = [
 
       const loop = gsap.to(track, {
         xPercent: -50,
-        duration: 40,
+        duration: 20,
         ease: "none",
         repeat: -1,
       });
