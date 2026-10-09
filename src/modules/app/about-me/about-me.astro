@@ -7,6 +7,7 @@ const stats = [
   { value: 100, suffix: "+", label: "Maquillajes" },
   { text: "Lifestyle", label: "Contenido para marcas" },
 ];
+const base = import.meta.env.BASE_URL.replace(/\/$/, "");
 ---
 
 <section
@@ -94,7 +95,7 @@ const stats = [
 
         <div data-fade class="mt-9">
           <a
-            href="/portfolio"
+            href={base + "/portafolio"}
             class="block rounded-full bg-primary-dark px-8 py-3 font-medium text-white transition hover:-translate-y-0.5 hover:bg-text-dark w-fit mx-auto sm:m-0"
           >
             Ver portafolio
