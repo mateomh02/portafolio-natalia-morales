@@ -1,57 +1,401 @@
 ---
+import { WHATSAPP_URL } from "@/modules/core/utils/contact";
+
+// src/components/Header.astro
+const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+
+// Enlaces con ruta completa: funcionan igual desde la home que desde otra página
 const navLinks = [
-  { name: "Inicio", url: "/" },
-  { name: "Sobre mí", url: "#about-me" },
-  { name: "Marcas", url: "#brands" },
-  { name: "Portafolio", url: "#portfolio" },
-  { name: "Servicios", url: "#services" },
+  { name: "Inicio", url: `${base}/`, key: "home" },
+  { name: "Sobre mí", url: `${base}/#about-me`, key: "#about-me" },
+  { name: "Marcas", url: `${base}/#brands`, key: "#brands" },
+  { name: "Portafolio", url: `${base}/#portfolio`, key: "#portfolio" },
+  { name: "Servicios", url: `${base}/servicios`, key: "servicios" },
 ];
 
-const current = Astro.url.pathname.replace(/\/$/, "") || "/";
+const isHome = Astro.url.pathname.replace(/\/$/, "") === base;
 ---
 
+<!--
+  data-solid  -> fondo sólido: negro en escritorio, rosado suave (primary-soft) en móvil
+  data-light  -> en móvil, logo y barras pasan a negro (cuando el fondo es claro o el menú está abierto)
+-->
 <header
   id="header"
-  class="fixed top-0 z-50 w-full backdrop-blur-md transition-all duration-300 [&.scrolled]:shadow-[0_4px_24px_rgb(74_52_39/0.15)]"
+  data-solid="false"
+  data-light="false"
+  data-menu="closed"
+  class="group/header fixed top-0 z-50 w-full transition-all duration-300 data-[solid=true]:shadow-[0_4px_24px_rgb(0_0_0/0.18)] max-md:data-[solid=true]:bg-primary-soft md:data-[solid=true]:bg-black"
 >
   <div
     class="mx-auto flex w-[85%] max-w-360 items-center justify-between py-4 transition-all duration-300 [#header.scrolled_&]:py-2"
   >
-    <a href="/" aria-label="Ir al inicio">
+    <a
+      href={`${base}/`}
+      aria-label="Ir al inicio"
+      data-nav
+      data-key="home"
+      data-logo-link
+    >
       <img
         src={`${import.meta.env.BASE_URL}/logo.png`}
         alt="Natalia Morales, maquillaje"
-        class="logo h-14 w-auto transition-all duration-300 [#header.scrolled_&]:h-10 brightness-0 invert"
+        class="logo h-14 w-auto brightness-0 invert transition-all duration-300 max-md:group-data-[light=true]/header:invert-0 [#header.scrolled_&]:h-10"
       />
     </a>
 
-    <nav aria-label="Principal">
-      <ul
-        class="flex flex-wrap justify-end gap-x-4 gap-y-1 text-sm sm:gap-x-7 sm:text-base"
-      >
+    <!-- Navegación de escritorio -->
+    <nav aria-label="Principal" class="hidden md:block">
+      <ul class="flex flex-wrap justify-end gap-x-7 gap-y-1 text-base">
         {
-          navLinks.map((link) => {
-            const active = current === link.url;
-            return (
-              <li>
-                <a
-                  href={link.url}
-                  aria-current={active ? "page" : undefined}
-                  class:list={[
-                    "font-secondary relative py-1 uppercase tracking-wide transition-colors hover:text-[#d47fa9]",
-                    "after:absolute after:inset-x-0 after:-bottom-0.5 after:h-px after:origin-left after:bg-rose-dark after:transition-transform after:duration-300",
-                    active
-                      ? "text-[#d47fa9] after:scale-x-100"
-                      : "text-white after:scale-x-0 hover:after:scale-x-100",
-                  ]}
-                >
-                  {link.name}
-                </a>
-              </li>
-            );
-          })
+          navLinks.map((link) => (
+            <li>
+              <a
+                href={link.url}
+                data-nav
+                data-key={link.key}
+                data-active={link.key === "home" && isHome ? "true" : "false"}
+                class="font-secondary relative py-1 tracking-wide text-white/75 uppercase transition-colors hover:text-white data-[active=true]:text-white after:absolute after:inset-x-0 after:-bottom-0.5 after:h-px after:origin-left after:scale-x-0 after:bg-white after:transition-transform after:duration-300 hover:after:scale-x-100 data-[active=true]:after:scale-x-100"
+              >
+                {link.name}
+              </a>
+            </li>
+          ))
         }
       </ul>
     </nav>
+
+    <!-- Botón hamburguesa -->
+    <button
+      id="menu-toggle"
+      type="button"
+      aria-label="Abrir menú"
+      aria-expanded="false"
+      aria-controls="mobile-menu"
+      class="group relative grid h-11 w-11 place-items-center rounded-full transition-colors hover:bg-white/15 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary max-md:group-data-[light=true]/header:hover:bg-black/5 md:hidden"
+    >
+      <span class="relative block h-4 w-6" aria-hidden="true">
+        <span
+          data-bar
+          class="absolute top-0 left-0 block h-0.5 w-full rounded-full bg-white max-md:group-data-[light=true]/header:bg-black"
+        ></span>
+        <span
+          data-bar
+          class="absolute top-[7px] right-0 block h-0.5 w-3/5 rounded-full bg-white transition-[width] duration-300 group-hover:w-full max-md:group-data-[light=true]/header:bg-black"
+        ></span>
+        <span
+          data-bar
+          class="absolute bottom-0 left-0 block h-0.5 w-full rounded-full bg-white max-md:group-data-[light=true]/header:bg-black"
+        ></span>
+      </span>
+    </button>
   </div>
 </header>
+
+<!-- Menú móvil (fuera del header para que backdrop-filter no afecte al position: fixed) -->
+<div
+  id="mobile-menu"
+  aria-hidden="true"
+  inert
+  class="invisible fixed inset-0 z-40 overflow-hidden bg-primary-soft md:hidden"
+>
+  <!-- Palabra de fondo (pequeña y suave) -->
+  <p
+    aria-hidden="true"
+    class="font-primary pointer-events-none absolute -right-2 -bottom-4 select-none text-[26vw] leading-none whitespace-nowrap text-primary/10 italic"
+  >
+    Natalia
+  </p>
+
+  <div class="relative flex h-full flex-col justify-between px-[8%] pt-24 pb-8">
+    <nav aria-label="Menú móvil">
+      <ul>
+        {
+          navLinks.map((link, i) => (
+            <li data-mm-item class="border-b border-black/10 last:border-b-0">
+              <a
+                href={link.url}
+                data-nav
+                data-mm-link
+                data-key={link.key}
+                data-active={link.key === "home" && isHome ? "true" : "false"}
+                class="flex items-baseline gap-4 py-3.5 text-black/75 transition-colors hover:text-black data-[active=true]:text-primary-dark"
+              >
+                <span class="font-secondary w-6 text-[0.65rem] tracking-[0.2em] text-primary-dark">
+                  {`0${i + 1}`}
+                </span>
+                <span class="font-primary text-3xl leading-none">
+                  {link.name}
+                </span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <div data-mm-foot class="flex flex-col gap-4">
+      <a
+        href={WHATSAPP_URL}
+        data-mm-link
+        class="font-secondary inline-flex w-fit items-center rounded-full bg-primary-dark px-7 py-3 text-sm font-medium text-white transition hover:bg-black"
+        target="_blank"
+      >
+        Reservar cita
+      </a>
+      <p
+        class="font-secondary text-[0.65rem] tracking-[0.25em] text-black/60 uppercase"
+      >
+        Maquilladora profesional
+      </p>
+    </div>
+  </div>
+</div>
+
+<script>
+  import gsap from "gsap";
+
+  type MenuCtl = {
+    close: (instant?: boolean) => void;
+    onKey: (e: KeyboardEvent) => void;
+  };
+
+  const w = window as unknown as { __navInit?: boolean };
+  const BASE = import.meta.env.BASE_URL.replace(/\/$/, "");
+  const isHome = () => location.pathname.replace(/\/$/, "") === BASE;
+
+  let ctl: MenuCtl | null = null;
+  let io: IntersectionObserver | null = null;
+  let onTop: (() => void) | null = null;
+
+  /* ---------- Fondo del header ----------
+     - En la home: transparente hasta pasar 120vh, luego sólido.
+     - En cualquier otra ruta: sólido siempre.
+     Se lee el DOM y la ruta en cada llamada, así sigue funcionando
+     después de navegar y volver. */
+  const updateHeader = () => {
+    const header = document.getElementById("header");
+    if (!header) return;
+    header.classList.toggle("scrolled", window.scrollY > 20);
+    const solid = !isHome() || window.scrollY > window.innerHeight * 1.2;
+    header.dataset.solid = String(solid);
+    // En móvil, con fondo claro o menú abierto, logo y barras pasan a negro
+    header.dataset.light = String(solid || header.dataset.menu === "open");
+  };
+
+  /* ---------- Enlace activo (solo en la home) ---------- */
+  const setupNav = () => {
+    const links = Array.from(
+      document.querySelectorAll<HTMLAnchorElement>("[data-nav]"),
+    );
+
+    // "Inicio" estando ya en la home: sube suave en vez de recargar
+    links.forEach((a) => {
+      if (a.dataset.bound) return;
+      a.dataset.bound = "1";
+      a.addEventListener("click", (e) => {
+        const url = new URL(a.href, location.href);
+        if (url.pathname === location.pathname && !url.hash) {
+          e.preventDefault();
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        }
+      });
+    });
+
+    io?.disconnect();
+    io = null;
+    onTop = null;
+    if (!isHome()) return;
+
+    const setActive = (key: string) =>
+      links.forEach((a) =>
+        a.setAttribute("data-active", String(a.dataset.key === key)),
+      );
+
+    io = new IntersectionObserver(
+      (entries) =>
+        entries.forEach((e) => {
+          if (e.isIntersecting) setActive(`#${e.target.id}`);
+        }),
+      { rootMargin: "-45% 0px -50% 0px" },
+    );
+    [...new Set(links.map((a) => a.dataset.key ?? ""))]
+      .filter((k) => k.startsWith("#"))
+      .forEach((k) => {
+        const el = document.querySelector(k);
+        if (el) io!.observe(el);
+      });
+
+    onTop = () => {
+      if (window.scrollY < 120) setActive("home");
+    };
+    onTop();
+  };
+
+  /* ---------- Menú móvil (animación simple) ---------- */
+  const setupMenu = () => {
+    const header = document.getElementById("header");
+    const btn = document.getElementById(
+      "menu-toggle",
+    ) as HTMLButtonElement | null;
+    const menu = document.getElementById("mobile-menu") as HTMLElement | null;
+    if (!header || !btn || !menu || menu.dataset.init) return;
+    menu.dataset.init = "1";
+
+    const reduce = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+    const bars = Array.from(btn.querySelectorAll<HTMLElement>("[data-bar]"));
+    const items = menu.querySelectorAll("[data-mm-item]");
+    const foot = menu.querySelector("[data-mm-foot]");
+    const menuLinks = Array.from(
+      menu.querySelectorAll<HTMLElement>("[data-mm-link]"),
+    );
+
+    let isOpen = false;
+    let busy = false;
+
+    const speed = (tl: gsap.core.Timeline, instant = false) =>
+      tl.timeScale(reduce || instant ? 60 : 1);
+
+    const setState = (open: boolean) => {
+      isOpen = open;
+      btn.setAttribute("aria-expanded", String(open));
+      btn.setAttribute("aria-label", open ? "Cerrar menú" : "Abrir menú");
+      menu.setAttribute("aria-hidden", String(!open));
+      menu.toggleAttribute("inert", !open);
+      header.dataset.menu = open ? "open" : "closed";
+      updateHeader();
+    };
+
+    const openMenu = () => {
+      if (isOpen || busy) return;
+      busy = true;
+
+      setState(true);
+      document.documentElement.style.overflow = "hidden";
+      menu.style.visibility = "visible";
+      menuLinks[0]?.focus({ preventScroll: true });
+
+      speed(
+        gsap
+          .timeline({
+            defaults: { ease: "power2.out" },
+            onComplete: () => (busy = false),
+          })
+          // Fondo: aparece con un fundido
+          .fromTo(menu, { opacity: 0 }, { opacity: 1, duration: 0.3 }, 0)
+          // Hamburguesa -> X
+          .to(bars[0], { y: 7, rotation: 45, duration: 0.3 }, 0)
+          .to(bars[2], { y: -7, rotation: -45, duration: 0.3 }, 0)
+          .to(bars[1], { scaleX: 0, opacity: 0, duration: 0.2 }, 0)
+          // Enlaces: suben un poco, uno tras otro
+          .fromTo(
+            items,
+            { y: 12, opacity: 0 },
+            { y: 0, opacity: 1, duration: 0.35, stagger: 0.05 },
+            0.1,
+          )
+          .fromTo(
+            foot,
+            { y: 12, opacity: 0 },
+            { y: 0, opacity: 1, duration: 0.35 },
+            0.3,
+          ),
+      );
+    };
+
+    const closeMenu = (instant = false) => {
+      if (!isOpen || busy) return;
+      busy = true;
+
+      setState(false);
+      document.documentElement.style.overflow = ""; // libera el scroll para que el ancla funcione
+
+      speed(
+        gsap
+          .timeline({
+            defaults: { ease: "power2.in" },
+            onComplete: () => {
+              menu.style.visibility = "hidden";
+              gsap.set([menu, items, foot], { clearProps: "all" });
+              gsap.set(bars, { clearProps: "all" });
+              busy = false;
+            },
+          })
+          // X -> hamburguesa
+          .to(bars[0], { y: 0, rotation: 0, duration: 0.25 }, 0)
+          .to(bars[2], { y: 0, rotation: 0, duration: 0.25 }, 0)
+          .to(bars[1], { scaleX: 1, opacity: 1, duration: 0.2 }, 0.1)
+          // Todo se desvanece
+          .to(menu, { opacity: 0, duration: 0.25 }, 0),
+        instant,
+      );
+    };
+
+    btn.addEventListener("click", () => (isOpen ? closeMenu() : openMenu()));
+    menuLinks.forEach((a) => a.addEventListener("click", () => closeMenu()));
+    header
+      .querySelector("[data-logo-link]")
+      ?.addEventListener("click", () => closeMenu());
+
+    ctl = {
+      close: (instant = false) => {
+        if (instant) busy = false;
+        closeMenu(instant);
+      },
+      onKey: (e) => {
+        if (!isOpen) return;
+        if (e.key === "Escape") return closeMenu();
+        if (e.key !== "Tab") return;
+
+        // Mantiene el foco dentro del menú (botón + enlaces)
+        const focusables = [btn, ...menuLinks];
+        const first = focusables[0];
+        const last = focusables[focusables.length - 1];
+        const active = document.activeElement;
+        if (e.shiftKey && active === first) {
+          e.preventDefault();
+          last.focus();
+        } else if (!e.shiftKey && active === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      },
+    };
+  };
+
+  const boot = () => {
+    updateHeader();
+    setupNav();
+    setupMenu();
+  };
+
+  /* ---------- Listeners globales (una sola vez) ---------- */
+  if (!w.__navInit) {
+    w.__navInit = true;
+
+    window.addEventListener(
+      "scroll",
+      () => {
+        updateHeader();
+        onTop?.();
+      },
+      { passive: true },
+    );
+    window.addEventListener("resize", updateHeader);
+    document.addEventListener("keydown", (e) => ctl?.onKey(e));
+    window.matchMedia("(min-width: 768px)").addEventListener("change", (e) => {
+      if (e.matches) ctl?.close(true); // si se agranda la pantalla, cierra el menú
+    });
+
+    // Navegación con View Transitions / ClientRouter: se vuelve a enlazar todo
+    document.addEventListener("astro:before-swap", () => {
+      document.documentElement.style.overflow = "";
+    });
+    document.addEventListener("astro:after-swap", boot);
+    document.addEventListener("astro:page-load", boot);
+  }
+
+  boot();
+</script>

@@ -1,12 +1,14 @@
 ---
+import { WHATSAPP_URL } from "@/modules/core/utils/contact";
 import { services, wa } from "./data";
 const base = import.meta.env.BASE_URL.replace(/\/$/, "");
 const photo = (file: string) => `${base}/servicios/${file}`;
+const total = String(services.length).padStart(2, "0");
 ---
 
-<section class="bg-white pt-28 pb-[7vh]">
+<section id="servicios" class="bg-white pt-28 pb-[7vh]">
   <div class="mx-auto w-[85%] max-w-6xl">
-    <header class="mb-14 text-center">
+    <header class="mb-10 text-center">
       <p class="font-secondary text-sm font-medium uppercase tracking-[0.25em] text-primary-dark">
         Servicios
       </p>
@@ -15,22 +17,58 @@ const photo = (file: string) => `${base}/servicios/${file}`;
       </h1>
     </header>
 
-    <div class="flex flex-col gap-16 md:gap-24">
+    <!-- Pestañas -->
+    <div
+      role="tablist"
+      aria-label="Servicios"
+      class="mb-8 flex flex-wrap justify-center gap-2"
+    >
       {
         services.map((s, i) => (
-          <article
-            id={s.slug}
-            class="grid scroll-mt-28 items-center gap-8 md:grid-cols-2 md:gap-16"
+          <button
+            type="button"
+            role="tab"
+            id={`tab-${s.slug}`}
+            aria-controls={`panel-${s.slug}`}
+            aria-selected={i === 0 ? "true" : "false"}
+            data-tab={s.slug}
+            class="cursor-pointer group font-secondary flex items-center gap-3 rounded-full bg-primary-soft p-1.5 pr-5 text-sm font-medium text-text-dark transition duration-300 hover:bg-primary-light/60 aria-selected:bg-primary-dark aria-selected:text-white"
+          >
+            <span class="grid h-10 w-10 place-items-center rounded-full bg-white text-primary-dark transition duration-300 group-aria-selected:bg-white/20 group-aria-selected:text-white">
+              <svg
+                viewBox="0 0 24 24"
+                class="h-5 w-5"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+                set:html={s.icon}
+              />
+            </span>
+            {s.title}
+          </button>
+        ))
+      }
+    </div>
+
+    <!-- Paneles -->
+    <div class="rounded-[2.5rem] bg-primary-soft p-6 md:p-10">
+      {
+        services.map((s, i) => (
+          <div
+            id={`panel-${s.slug}`}
+            role="tabpanel"
+            aria-labelledby={`tab-${s.slug}`}
+            data-panel={s.slug}
+            hidden={i !== 0}
+            class="grid items-center gap-8 md:grid-cols-[0.8fr_1.2fr] md:gap-14"
           >
             <!-- Foto en arco -->
-            <div
-              class:list={[
-                "relative mx-auto aspect-[4/5] w-full max-w-sm",
-                i % 2 === 1 && "md:order-2",
-              ]}
-            >
-              <div class="absolute inset-0 translate-x-3 translate-y-3 rounded-t-[999px] rounded-b-md border border-primary/40" />
-              <div class="absolute inset-0 overflow-hidden rounded-t-[999px] rounded-b-md bg-primary-soft shadow-[0_25px_60px_rgb(61_16_48/0.15)]">
+            <div class="relative mx-auto aspect-[4/5] w-full max-w-xs">
+              <div class="absolute inset-0 translate-x-3 translate-y-3 rounded-t-[999px] rounded-b-md border border-primary/50" />
+              <div class="absolute inset-0 overflow-hidden rounded-t-[999px] rounded-b-md bg-white shadow-[0_25px_60px_rgb(61_16_48/0.15)]">
                 <img
                   src={photo(s.photo)}
                   alt={s.alt}
@@ -39,28 +77,14 @@ const photo = (file: string) => `${base}/servicios/${file}`;
                   class="h-full w-full object-cover object-top"
                 />
               </div>
-              <span class="font-secondary absolute -top-2 -left-2 grid h-14 w-14 place-items-center rounded-full bg-white text-sm font-semibold text-primary-dark shadow-md">
-                {`0${i + 1}`}
-              </span>
             </div>
 
             <!-- Texto -->
-            <div class:list={["text-center md:text-left", i % 2 === 1 && "md:order-1"]}>
-              <span class="mx-auto grid h-14 w-14 place-items-center rounded-full bg-primary-soft text-primary-dark md:mx-0">
-                <svg
-                  viewBox="0 0 24 24"
-                  class="h-6 w-6"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  aria-hidden="true"
-                  set:html={s.icon}
-                />
-              </span>
-
-              <h2 class="font-secondary mt-5 text-3xl font-semibold text-text-dark lg:text-4xl">
+            <div class="text-center md:text-left">
+              <p class="font-secondary text-sm font-medium tracking-[0.25em] text-primary-dark">
+                {`0${i + 1}`} / {total}
+              </p>
+              <h2 class="font-secondary mt-2 text-3xl font-semibold text-text-dark lg:text-4xl">
                 {s.title}
               </h2>
               <p class="font-secondary mx-auto mt-4 max-w-md text-base leading-relaxed text-text md:mx-0 lg:text-lg">
@@ -70,26 +94,113 @@ const photo = (file: string) => `${base}/servicios/${file}`;
               <ul class="mt-5 flex flex-wrap justify-center gap-2 md:justify-start">
                 {
                   s.items.map((item) => (
-                    <li class="font-secondary rounded-full bg-primary-soft px-4 py-1.5 text-sm text-text-dark">
+                    <li class="font-secondary rounded-full bg-white px-4 py-1.5 text-sm text-text-dark">
                       {item}
                     </li>
                   ))
                 }
               </ul>
 
-              <a
-                href={wa(s.title)}
-                target="_blank"
-                rel="noopener noreferrer"
-                class="font-secondary mt-8 inline-flex items-center gap-2 rounded-full bg-primary-dark px-8 py-4 font-medium text-white transition hover:-translate-y-0.5 hover:bg-text-dark"
-              >
-                Reservar {s.title.toLowerCase()}
-                <span aria-hidden="true">→</span>
-              </a>
+              <div class="mt-8 flex flex-wrap justify-center gap-3 md:justify-start">
+                <a
+                  href={WHATSAPP_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="font-secondary inline-flex items-center gap-2 rounded-full bg-primary-dark px-8 py-4 font-medium text-white transition hover:-translate-y-0.5 hover:bg-text-dark"
+                >
+                  Reservar
+                  <span aria-hidden="true">→</span>
+                </a>
+                <button
+                  type="button"
+                  data-next
+                  class="cursor-pointer font-secondary rounded-full border border-primary/50 px-6 py-4 text-sm text-text-dark transition hover:bg-white"
+                >
+                  Siguiente servicio
+                </button>
+              </div>
             </div>
-          </article>
+          </div>
         ))
       }
     </div>
   </div>
 </section>
+
+<style>
+  @keyframes panel-in {
+    from {
+      opacity: 0;
+      transform: translateY(14px);
+    }
+  }
+  [data-panel]:not([hidden]) {
+    animation: panel-in 0.5s ease-out;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    [data-panel]:not([hidden]) {
+      animation: none;
+    }
+  }
+</style>
+
+<script>
+  let ac: AbortController | null = null;
+
+  function init() {
+    const root = document.getElementById("servicios");
+    if (!root || root.dataset.ready) return; // evita doble inicio
+    root.dataset.ready = "true";
+
+    ac?.abort();
+    ac = new AbortController();
+    const { signal } = ac;
+
+    const tabs = Array.from(root.querySelectorAll<HTMLButtonElement>("[data-tab]"));
+    const panels = Array.from(root.querySelectorAll<HTMLElement>("[data-panel]"));
+    const slugs = tabs.map((t) => t.dataset.tab!);
+
+    const show = (slug: string, updateHash = true) => {
+      if (!slugs.includes(slug)) return;
+      panels.forEach((p) => (p.hidden = p.dataset.panel !== slug));
+      tabs.forEach((t) => {
+        const on = t.dataset.tab === slug;
+        t.setAttribute("aria-selected", String(on));
+        t.tabIndex = on ? 0 : -1;
+      });
+      if (updateHash) history.replaceState(null, "", `#${slug}`);
+    };
+
+    tabs.forEach((t, i) => {
+      t.addEventListener("click", () => show(t.dataset.tab!), { signal });
+      // Flechas del teclado
+      t.addEventListener(
+        "keydown",
+        (e) => {
+          if (e.key !== "ArrowRight" && e.key !== "ArrowLeft") return;
+          const dir = e.key === "ArrowRight" ? 1 : -1;
+          const next = tabs[(i + dir + tabs.length) % tabs.length];
+          show(next.dataset.tab!);
+          next.focus();
+        },
+        { signal },
+      );
+    });
+
+    // Botón "Siguiente servicio"
+    root.querySelectorAll<HTMLButtonElement>("[data-next]").forEach((b, i) => {
+      b.addEventListener("click", () => show(slugs[(i + 1) % slugs.length]), { signal });
+    });
+
+    // Abrir directo con /services#peinado (también desde el CTA)
+    window.addEventListener("hashchange", () => show(location.hash.slice(1), false), { signal });
+    show(slugs.includes(location.hash.slice(1)) ? location.hash.slice(1) : slugs[0], false);
+  }
+
+  document.addEventListener("astro:before-swap", () => {
+    ac?.abort();
+    ac = null;
+  });
+  document.addEventListener("astro:page-load", init);
+  init();
+</script>

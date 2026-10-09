@@ -1,52 +1,68 @@
 ---
+import { WHATSAPP_URL } from "@/modules/core/utils/contact";
+
 // src/components/Hero.astro
+const base = import.meta.env.BASE_URL;
 ---
 
 <section
-  class="relative isolate h-[calc(100svh-5.5rem)] min-h-[520px] w-full overflow-hidden"
+  id="inicio"
+  class="relative isolate h-svh min-h-[520px] w-full overflow-hidden"
 >
+  <!-- Imagen de respaldo: se ve mientras carga el video, si falla, o con "reducir movimiento" -->
   <img
-    src={`${import.meta.env.BASE_URL}/banner.png`}
+    src={`${base}/banner.png`}
     alt="Natalia Morales maquillando a una novia en su estudio"
-    class="hero-img absolute inset-0 -z-20 h-full w-full object-cover object-[60%_30%] brightness-50"
+    class="hero-media absolute inset-0 -z-20 h-full w-full object-cover object-[60%_30%] brightness-[0.25]"
     fetchpriority="high"
     loading="eager"
     decoding="async"
   />
 
-  <!-- Degradado para que el texto se lea -->
-  <div
-    class="absolute inset-0 -z-10 bg-gradient-to-t from-[#FF4DA6]/10 via-[#FF4DA6]/20 to-transparent"
-  >
+  <!-- Video de fondo -->
+  <div>
+    <video
+      data-hero-video
+      class="hero-media absolute inset-0 -z-20 h-full w-full object-cover object-[100%_30%] sm:object-[60%_30%] brightness-[0.25] motion-reduce:hidden"
+      autoplay
+      muted
+      loop
+      playsinline
+      preload="auto"
+      aria-hidden="true"
+      tabindex="-1"
+    >
+      <source src={`${base}/video-pagina-natalia.mp4`} type="video/mp4" />
+    </video>
   </div>
 
-  <div class="mx-auto flex h-full max-w-7xl items-end px-[6vw] pb-[10vh]">
+  <div
+    class="mx-auto flex h-full items-end pr-[6vw] pb-[10vh] w-[85%] max-w-360"
+  >
     <div class="max-w-xl text-white">
       <p
-        class="reveal font-rose mb-3 text-sm uppercase tracking-[0.25em] text-white"
+        class="reveal font-secondary mb-3 text-sm uppercase tracking-[0.25em] text-white"
         style="--d:0.1s"
       >
-        Maquillaje profesional
+        Maquillaje &amp; creación de contenido
       </p>
       <h1
         class="reveal font-primary text-5xl leading-[1.05] sm:text-6xl lg:text-7xl"
         style="--d:0.25s"
       >
-        Tu piel, tu tono, <em class="text-white">tu mejor día</em>
+        Realzo tu belleza, <em class="text-white">conecto con tu marca</em>
       </h1>
-      <p class="reveal font-rose mt-5 max-w-md text-white/90" style="--d:0.4s">
-        Novias, sesiones y eventos con acabados suaves y piel luminosa.
-      </p>
       <div class="reveal mt-8 flex flex-wrap gap-3" style="--d:0.55s">
         <a
-          href="/services"
-          class="rounded-full bg-white px-8 py-3.5 font-medium text-primary transition hover:-translate-y-0.5"
+          href={WHATSAPP_URL}
+          class="rounded-full text-white p-2 sm:px-8 sm:py-3.5 font-medium bg-primary-dark transition hover:-translate-y-0.5 h-fit"
+          target="_blank"
         >
           Reservar cita
         </a>
         <a
-          href="/portfolio"
-          class="rounded-full border border-white/70 px-8 py-3.5 text-white transition hover:bg-white/15"
+          href={`${base}/#portfolio`}
+          class="rounded-full border border-white/70 p-2 sm:px-8 sm:py-3.5 text-white transition hover:bg-white/15"
         >
           Ver trabajos
         </a>
@@ -56,7 +72,7 @@
 </section>
 
 <style>
-  .hero-img {
+  .hero-media {
     animation: zoom 1.8s ease-out both;
   }
   .reveal {
@@ -77,9 +93,26 @@
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .hero-img,
+    .hero-media,
     .reveal {
       animation: none;
     }
   }
 </style>
+
+<script>
+  // Pausa el video cuando el hero sale de pantalla (ahorra batería y datos)
+  const init = () => {
+    const video = document.querySelector<HTMLVideoElement>("[data-hero-video]");
+    if (!video || video.dataset.init) return;
+    video.dataset.init = "1";
+
+    new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) video.play().catch(() => {});
+      else video.pause();
+    }).observe(video);
+  };
+
+  init();
+  document.addEventListener("astro:page-load", init);
+</script>

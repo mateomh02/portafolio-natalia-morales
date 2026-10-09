@@ -1,4 +1,6 @@
 ---
+import { WHATSAPP_URL } from "@/modules/core/utils/contact";
+
 // src/components/Portfolio.astro
 
 // Normaliza BASE_URL para no generar rutas con "//"
@@ -37,14 +39,14 @@ const looks = [
 ];
 ---
 
-<section id="portfolio" class="overflow-hidden bg-white pt-32 pb-20 md:pt-40 md:pb-28">
+<section id="portfolio" class="overflow-hidden bg-white pt-32 pb-20 md:pt-14 md:pb-28">
   <div class="mx-auto w-[85%] max-w-360">
     <!-- Encabezado -->
     <div class="flex flex-col">
       <div>
         <h1
           data-head
-          class="font-secondary mb-3 text-4xl uppercase tracking-[0.3em] text-primary-dark"
+          class="font-secondary mb-3 text-4xl uppercase tracking-[0.3em] text-primary-dark font-extrabold"
         >
           Portafolio
       </h1>
@@ -58,7 +60,7 @@ const looks = [
     </div>
  
     <!-- Galería -->
-    <ul class="mt-14 grid gap-14 md:mt-20 md:grid-cols-3 md:gap-8 lg:gap-14">
+    <ul class="mt-14 grid gap-14 md:mt-5 md:grid-cols-3 md:gap-8 lg:gap-14">
       {
         looks.map((look, i) => (
           <li
@@ -197,8 +199,9 @@ const looks = [
       <div class="mt-4 flex flex-col h-1/2 justify-between">
         <div class="flex flex-wrap items-center gap-3 ">
           <a
-            href="/services"
+            href={WHATSAPP_URL}
             class="rounded-full bg-primary-dark px-8 py-3 font-medium text-white transition hover:-translate-y-0.5 hover:bg-text-dark"
+            target="_blank"
           >
             Reservar cita
           </a>

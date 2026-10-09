@@ -12,7 +12,7 @@ export const services = [
         description:
             "Social, quinceañeras y novias. Piel luminosa y acabado natural que dura todo el día.",
         items: ["Maquillaje social", "Quinceañeras", "Novias con prueba previa"],
-        photo: "maquillaje.jpg",
+        photo: "maquillaje.jpeg",
         alt: "Servicio de maquillaje profesional",
         icon: `<rect x="8" y="14" width="8" height="7" rx="1" /><path d="M9.5 14V9.5L12 4l2.5 5.5V14" />`,
     },
@@ -22,7 +22,7 @@ export const services = [
         description:
             "Peinados que combinan con tu maquillaje y tu evento, desde algo suave hasta recogidos elegantes.",
         items: ["Recogidos", "Ondas y semirecogidos", "Peinado de novia"],
-        photo: "peinado.jpg",
+        photo: "peinado.jpeg",
         alt: "Servicio de peinado para eventos",
         icon: `<circle cx="6" cy="6" r="3" /><circle cx="6" cy="18" r="3" /><path d="M20 4 8.1 15.9M14.5 14.5 20 20M8.1 8.1 12 12" />`,
     },
@@ -32,7 +32,7 @@ export const services = [
         description:
             "Maquillaje y contenido para campañas, sesiones y producciones de marcas.",
         items: ["Maquillaje para producción", "Sesiones de fotos y video", "Campañas de marca"],
-        photo: "pautas.jpg",
+        photo: "pauta-publicitaria.jpeg",
         alt: "Maquillaje para producciones publicitarias",
         icon: `<rect x="3" y="7" width="18" height="13" rx="3" /><circle cx="12" cy="13.5" r="3.5" /><path d="M8 7l1.5-3h5L16 7" />`,
     },
@@ -42,7 +42,7 @@ export const services = [
         description:
             "Videos y fotos para redes con mi estilo, listos para publicar en tu marca.",
         items: ["Reels y shorts", "Reseñas de producto", "Tutoriales"],
-        photo: "contenido.jpg",
+        photo: "contenido-marcas.jpeg",
         alt: "Creación de contenido para marcas",
         icon: `<rect x="3" y="4" width="18" height="16" rx="4" /><path d="M10 9l5 3-5 3z" />`,
     },

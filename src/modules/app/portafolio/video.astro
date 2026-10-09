@@ -1,35 +1,75 @@
 ---
+// src/components/BrandVideos.astro
 const base = import.meta.env.BASE_URL.replace(/\/$/, "");
 const logo = (file: string) => `${base}/brand/${file}`;
 
-// Acepta URL completa (shorts, watch, youtu.be) o solo el ID
-const getId = (url: string) =>
-  url.match(/(?:shorts\/|embed\/|v=|youtu\.be\/)([\w-]{11})/)?.[1] ?? url;
+// Acepta la URL completa de Instagram (post, reel o tv) o solo el código
+const getCode = (url: string) =>
+  url.match(/instagram\.com\/(?:[\w.]+\/)?(?:p|reel|tv)\/([\w-]+)/)?.[1] ?? url;
 
+// /p/CODIGO/embed funciona tanto para posts como para reels
 const embed = (url: string) =>
-  `https://www.youtube-nocookie.com/embed/${getId(url)}?rel=0&playsinline=1&modestbranding=1`;
+  `https://www.instagram.com/p/${getCode(url)}/embed`;
 
 // Un video por marca. El orden del arreglo es el orden en pantalla.
 const videos = [
+  // Marcas de Maquillaje y Cuidado Personal
   {
-    brand: "CeraVe",
-    logo: logo("cerave.png"),
-    url: "https://www.youtube.com/shorts/IvDO4qFiQyI",
-  },
-  {
-    brand: "Neutrogena",
-    logo: logo("neutrogena.png"),
-    url: "https://www.youtube.com/shorts/BBBBBBBBBBB",
+    brand: "Vogue",
+    logo: logo("vogue.png"),
+    url: "https://www.instagram.com/reel/DaDrITYuiY3",
   },
   {
     brand: "L'Oréal",
     logo: logo("loreal.png"),
-    url: "https://www.youtube.com/shorts/CCCCCCCCCCC",
+    url: "https://www.instagram.com/reel/DYX7KQyurab/",
   },
   {
-    brand: "Rappi",
-    logo: logo("rappi.png"),
-    url: "https://www.youtube.com/shorts/DDDDDDDDDDD",
+    brand: "Neutrogena",
+    logo: logo("neutrogena.png"),
+    url: "https://www.instagram.com/reel/DZJIuTytY6k/",
+  },
+  {
+    brand: "CeraVe",
+    logo: logo("cerave.png"),
+    url: "https://www.instagram.com/p/DWDLEdktj_h",
+  },
+  {
+    brand: "Dove",
+    logo: logo("dove.png"),
+    url: "https://www.instagram.com/reel/DWST6dxNAKO",
+  },
+  {
+    brand: "Sedal",
+    logo: logo("sedal.png"),
+    url: "https://www.instagram.com/reel/DKfw_tVgLpj",
+  },
+  {
+    brand: "Savital",
+    logo: logo("savital.png"),
+    url: "https://www.instagram.com/reel/DTQ0-iWEr0A",
+  },
+  {
+    brand: "Gillette",
+    logo: logo("gillette.png"),
+    url: "https://www.instagram.com/reel/DWfXGrWNEuu",
+  },
+  {
+    brand: "Farmatodo",
+    logo: logo("farmatodo.png"),
+    url: "https://www.instagram.com/reel/DdaL-VftaFm",
+  },
+
+  // Otras Marcas (Transporte, Bebidas, etc.)
+  {
+    brand: "inDrive",
+    logo: logo("inDrive.png"),
+    url: "https://www.instagram.com/reel/Da1PpcetInL",
+  },
+  {
+    brand: "FourLoko",
+    logo: logo("fourloko.png"),
+    url: "https://www.instagram.com/reel/DHCdZKcAiFW",
   },
 ].map((v) => ({ ...v, src: embed(v.url) }));
 ---
@@ -47,7 +87,11 @@ const videos = [
       </h2>
     </header>
 
-    <div class="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 lg:gap-5">
+    <!--
+      El embed de Instagram tiene un ancho mínimo de ~326px, por eso
+      1 columna en móvil (en 2 columnas se vería aplastado).
+    -->
+    <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
       {
         videos.map((v) => (
           <article class="flex flex-col gap-3 rounded-3xl bg-primary-soft p-3">
@@ -59,19 +103,46 @@ const videos = [
                 class="max-h-8 w-auto max-w-full object-contain"
               />
             </div>
-            <div class="aspect-9/16 overflow-hidden rounded-2xl bg-white">
+
+            <div class="overflow-hidden rounded-2xl bg-white">
               <iframe
-                data-src={v.src}
-                title={`Video con ${v.brand}`}
-                class="h-full w-full"
-                allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
+                src={v.src}
+                title={`Video de Instagram con ${v.brand}`}
+                class="insta-embed w-full"
+                loading="lazy"
+                scrolling="no"
+                allowtransparency="true"
+                allow="encrypted-media; picture-in-picture; fullscreen"
                 allowfullscreen
                 referrerpolicy="strict-origin-when-cross-origin"
               />
             </div>
+
+            <a
+              href={v.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="px-2 pb-1 text-center text-sm font-medium text-primary-dark hover:underline"
+            >
+              Ver en Instagram
+            </a>
           </article>
         ))
       }
     </div>
   </div>
 </section>
+
+<style>
+  /* Altura del embed de Instagram (cabecera + video 9:16 + pie).
+     Ajusta estos valores después de verlo en tu pantalla. */
+  .insta-embed {
+    height: 640px;
+    border: 0;
+  }
+  @media (min-width: 1024px) {
+    .insta-embed {
+      height: 700px;
+    }
+  }
+</style>
