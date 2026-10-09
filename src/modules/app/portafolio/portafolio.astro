@@ -116,7 +116,7 @@ const looks = [
     </p>
     <a
       data-info
-      href={`${base}/portafolio#${look.redirect}`}
+      href={`${base}/portafolio/#${look.redirect}`}
       class="font-secondary mt-4 inline-flex items-center gap-2 text-sm font-medium uppercase tracking-[0.15em] text-primary-dark"
     >
       Ver más <span class="transition-transform duration-300 group-hover:translate-x-1">→</span>
@@ -154,6 +154,7 @@ const looks = [
   aria-labelledby="lb-title"
   class="m-0 h-full max-h-none w-full max-w-none overflow-x-hidden overflow-y-auto bg-transparent p-4 open:flex backdrop:bg-text-dark/60 backdrop:backdrop-blur-sm"
 >
+ 
   <div
     data-lb-panel
     class="relative isolate m-auto grid w-full max-w-5xl md:grid-cols-[0.9fr_1.1fr]"
@@ -164,18 +165,17 @@ const looks = [
       class="absolute inset-0 -z-10 rounded-3xl bg-white shadow-[0_40px_100px_rgb(61_16_48/0.35)]"
     >
     </div>
- 
-    <button
-      type="button"
-      data-lb-close
-      aria-label="Cerrar"
-      class="absolute top-4 right-4 z-10 grid h-11 w-11 place-items-center rounded-full bg-white text-text-dark shadow-md transition hover:bg-primary-soft"
-    >
-      <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-        <path d="M6 6l12 12M18 6L6 18" />
-      </svg>
-    </button>
- 
+
+ <button
+  type="button"
+  data-lb-close
+  aria-label="Cerrar"
+  class="absolute top-4 right-4 z-50 grid h-12 w-12 cursor-pointer place-items-center rounded-full bg-white text-text-dark shadow-xl ring-1 ring-black/10 transition hover:scale-105 hover:bg-primary-soft opacity-100!"
+>
+  <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true">
+    <path d="M6 6l12 12M18 6L6 18" />
+  </svg>
+</button>
     <div
       data-lb-side
       class="flex items-center justify-center rounded-t-3xl bg-primary-soft p-8 md:rounded-l-3xl md:rounded-tr-none md:p-10"

@@ -1,0 +1,30 @@
+---
+import { WHATSAPP_URL_CREATOR } from "../core/utils/contact";
+
+// src/components/Copyright.astro
+const year = new Date().getFullYear();
+
+// Cambia estos datos por los tuyos
+const creator = "Mateo Hernández / Andres Mozo";
+---
+
+<div class="bg-black py-6">
+  <div
+    class="font-secondary mx-auto flex w-[85%] max-w-360 flex-col items-center justify-between gap-2 text-center text-sm text-white/70 md:flex-row md:text-left"
+  >
+    <p>
+      © {year} Natalia Morales. Todos los derechos reservados.
+    </p>
+    <p>
+      Hecho por {""}
+      <a
+        href={WHATSAPP_URL_CREATOR}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="font-medium text-white underline-offset-4 transition hover:text-primary-soft hover:underline"
+      >
+        {creator}
+      </a>
+    </p>
+  </div>
+</div>
